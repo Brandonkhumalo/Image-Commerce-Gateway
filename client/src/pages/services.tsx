@@ -29,59 +29,57 @@ export default function Services() {
       <section className="py-16 sm:py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, i) => (
-                <Card key={i} className="overflow-visible">
-                  <div className="flex flex-col sm:flex-row">
-                    <Skeleton className="h-48 sm:h-auto sm:w-48 rounded-t-md sm:rounded-l-md sm:rounded-tr-none shrink-0" />
-                    <div className="p-5 flex-1">
-                      <Skeleton className="h-5 w-3/4 mb-3" />
-                      <Skeleton className="h-4 w-full mb-2" />
-                      <Skeleton className="h-4 w-2/3 mb-4" />
-                      <Skeleton className="h-6 w-20" />
-                    </div>
+                <Card key={i} className="overflow-hidden">
+                  <Skeleton className="h-52 w-full" />
+                  <div className="p-5">
+                    <Skeleton className="h-5 w-3/4 mb-3" />
+                    <Skeleton className="h-4 w-full mb-2" />
+                    <Skeleton className="h-4 w-2/3 mb-4" />
+                    <Skeleton className="h-6 w-20" />
                   </div>
                 </Card>
               ))}
             </div>
           ) : (
             categories.map((category) => (
-              <div key={category} className="mb-14 last:mb-0">
+              <div key={category} className="mb-16 last:mb-0">
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-1.5 h-8 bg-amber-500 rounded-full" />
                   <h2 className="text-2xl sm:text-3xl font-bold" data-testid={`text-category-${category}`}>{category}</h2>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                   {services
                     ?.filter((s) => s.category === category)
                     .map((service) => (
-                      <Card key={service.id} className="overflow-visible hover-elevate group" data-testid={`card-service-detail-${service.id}`}>
-                        <div className="flex flex-col sm:flex-row">
-                          <div className="overflow-hidden sm:w-48 shrink-0 rounded-t-md sm:rounded-l-md sm:rounded-tr-none">
-                            <img
-                              src={service.image}
-                              alt={service.name}
-                              className="h-48 sm:h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                            />
-                          </div>
-                          <div className="p-5 flex-1 flex flex-col">
-                            <div className="flex items-start justify-between gap-2 mb-2 flex-wrap">
-                              <h3 className="font-semibold text-lg">{service.name}</h3>
-                              {service.featured && <Badge variant="secondary" className="text-xs">Featured</Badge>}
+                      <Card key={service.id} className="overflow-hidden hover-elevate group" data-testid={`card-service-detail-${service.id}`}>
+                        <div className="relative overflow-hidden">
+                          <img
+                            src={service.image}
+                            alt={service.name}
+                            className="h-52 w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                          {service.featured && (
+                            <div className="absolute top-3 right-3">
+                              <Badge className="bg-amber-500 text-white border-amber-500 text-xs">Featured</Badge>
                             </div>
-                            <p className="text-sm text-muted-foreground mb-4 flex-1 leading-relaxed">{service.description}</p>
-                            <div className="flex items-center gap-4 flex-wrap">
-                              {service.duration && (
-                                <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                                  <Clock className="w-4 h-4" />
-                                  <span>{service.duration}</span>
-                                </div>
-                              )}
+                          )}
+                        </div>
+                        <div className="p-5">
+                          <h3 className="font-semibold text-lg mb-2">{service.name}</h3>
+                          <p className="text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-3">{service.description}</p>
+                          <div className="flex items-center gap-4 flex-wrap">
+                            {service.duration && (
                               <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-                                <Users className="w-4 h-4" />
-                                <span>Contact for pricing</span>
+                                <Clock className="w-4 h-4 shrink-0" />
+                                <span>{service.duration}</span>
                               </div>
+                            )}
+                            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                              <Users className="w-4 h-4 shrink-0" />
+                              <span>Contact for pricing</span>
                             </div>
                           </div>
                         </div>
