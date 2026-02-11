@@ -3,10 +3,10 @@ import { Card } from "@/components/ui/card";
 import logoPath from "@assets/dmac_logo_1770835060703.jpeg";
 
 const values = [
-  { icon: Award, title: "Excellence", desc: "We deliver the highest quality hospitality services that meet global standards." },
-  { icon: Lightbulb, title: "Innovation", desc: "Continuously evolving our offerings to create unique, memorable experiences." },
-  { icon: Handshake, title: "Integrity", desc: "Building trust through honest, transparent business practices." },
-  { icon: Users, title: "Teamwork", desc: "Collaborative effort to ensure every event exceeds expectations." },
+  { icon: Award, title: "Excellence", desc: "We deliver the highest quality hospitality services that meet global standards.", image: "/images/value-excellence.png" },
+  { icon: Lightbulb, title: "Innovation", desc: "Continuously evolving our offerings to create unique, memorable experiences.", image: "/images/value-innovation.png" },
+  { icon: Handshake, title: "Integrity", desc: "Building trust through honest, transparent business practices.", image: "/images/value-integrity.png" },
+  { icon: Users, title: "Teamwork", desc: "Collaborative effort to ensure every event exceeds expectations.", image: "/images/value-teamwork.png" },
 ];
 
 const csrProjects = [
@@ -116,13 +116,17 @@ export default function About() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {values.map((v) => (
-              <Card key={v.title} className="p-6 text-center">
-                <div className="w-12 h-12 mx-auto mb-4 rounded-md bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
-                  <v.icon className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              <div key={v.title} className="relative rounded-md overflow-hidden group h-64">
+                <img src={v.image} alt={v.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/20" />
+                <div className="relative z-10 h-full flex flex-col items-center justify-end p-6 text-center">
+                  <div className="w-11 h-11 mb-3 rounded-md bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                    <v.icon className="w-5 h-5 text-amber-400" />
+                  </div>
+                  <h3 className="font-semibold text-base text-white mb-1.5" data-testid={`text-value-${v.title.toLowerCase()}`}>{v.title}</h3>
+                  <p className="text-sm text-gray-300 leading-relaxed">{v.desc}</p>
                 </div>
-                <h3 className="font-semibold text-base mb-2" data-testid={`text-value-${v.title.toLowerCase()}`}>{v.title}</h3>
-                <p className="text-sm text-muted-foreground">{v.desc}</p>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
