@@ -1,19 +1,27 @@
-import { Heart, Target, Eye, Award, Users, Leaf } from "lucide-react";
+import { Target, Eye, Award, Users, Lightbulb, Handshake, Heart } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import logoPath from "@assets/dmac_logo_1770835060703.jpeg";
 
-const team = [
-  { name: "Dr. David Makoni", role: "Founder & Wellness Director", image: "/images/service-coaching.png" },
-  { name: "Grace Chikwanha", role: "Head Fitness Trainer", image: "/images/service-fitness.png" },
-  { name: "Tendai Moyo", role: "Nutrition Specialist", image: "/images/service-nutrition.png" },
-  { name: "Ruth Ncube", role: "Spa & Relaxation Lead", image: "/images/service-spa.png" },
+const values = [
+  { icon: Award, title: "Excellence", desc: "We deliver the highest quality hospitality services that meet global standards." },
+  { icon: Lightbulb, title: "Innovation", desc: "Continuously evolving our offerings to create unique, memorable experiences." },
+  { icon: Handshake, title: "Integrity", desc: "Building trust through honest, transparent business practices." },
+  { icon: Users, title: "Teamwork", desc: "Collaborative effort to ensure every event exceeds expectations." },
 ];
 
-const values = [
-  { icon: Heart, title: "Compassion", desc: "We genuinely care about every client's well-being and personal journey." },
-  { icon: Target, title: "Excellence", desc: "Committed to delivering the highest quality services and results." },
-  { icon: Leaf, title: "Holistic Approach", desc: "Addressing mind, body, and spirit for complete wellness." },
-  { icon: Award, title: "Integrity", desc: "Building trust through honest, transparent practices." },
+const csrProjects = [
+  {
+    title: "Igniting the Future Through Education",
+    desc: "One of DMAC's core CSR commitments is in children's education. We helped source primary and secondary school textbooks for Mutimusakwa School in Mhondoro, resulting in remarkable improvement in school results."
+  },
+  {
+    title: "A Commitment to Public Health",
+    desc: "During the peak of the Covid health crisis, DMAC in conjunction with the Zimbabwe National Army mobilised resources to ensure community safety through free vaccinations, providing essential COVID-19 testing and health education."
+  },
+  {
+    title: "Honouring Our Heroes",
+    desc: "Between 2019 and 2021, DMAC spearheaded the exhumation and reburial of 120 bodies of ex-freedom fighters found in a disused shaft in the Odzi area of Mutare. The entire exercise, costing US$350,000, was fully funded by DMAC Zimbabwe."
+  },
 ];
 
 export default function About() {
@@ -27,7 +35,7 @@ export default function About() {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <span className="text-amber-400 font-medium text-sm uppercase tracking-wide">Our Story</span>
           <h1 className="text-4xl sm:text-5xl font-bold text-white mt-2 mb-4">About DMAC</h1>
-          <p className="text-gray-300 max-w-xl text-lg">A premier lifestyle centre dedicated to transforming lives through holistic wellness in the heart of Zimbabwe.</p>
+          <p className="text-gray-300 max-w-xl text-lg">A premier hospitality and events centre offering sustainable, world-class services in the heart of Zimbabwe.</p>
         </div>
       </section>
 
@@ -38,36 +46,36 @@ export default function About() {
               <div className="flex items-center gap-4 mb-6">
                 <img src={logoPath} alt="DMAC" className="h-20 w-auto rounded-md" />
                 <div>
-                  <h2 className="text-2xl font-bold">DMAC Lifestyle Centre</h2>
-                  <p className="text-muted-foreground">Harare, Zimbabwe</p>
+                  <h2 className="text-2xl font-bold">DMAC Zimbabwe Pvt Ltd</h2>
+                  <p className="text-muted-foreground">40 James Martin Drive, Lochinvar, Harare</p>
                 </div>
               </div>
               <p className="text-muted-foreground mb-4 leading-relaxed">
-                Founded with a vision to provide Zimbabweans with world-class wellness services, DMAC Lifestyle Centre has grown to become one of Harare's most trusted destinations for health, fitness, and personal transformation.
+                DMAC Zimbabwe is a subsidiary of DMAC Dubai focusing mainly in the hospitality and mining sectors of Zimbabwe. In Dubai, DMAC placed itself as a bridge for the movement of capital and technology from the developed world into Africa and the reverse movement of finished products from Africa to the global markets.
               </p>
               <p className="text-muted-foreground mb-4 leading-relaxed">
-                Our comprehensive approach combines modern fitness training, traditional wellness practices, expert nutritional guidance, and rejuvenating spa treatments to help our clients achieve optimal health and balance.
+                DMAC Lifestyle Centre is the hospitality flagship of DMAC Zimbabwe Private Limited with its main branch at number 40 James Martin Drive, Lochinvar, Harare. In Harare, DMAC has 7 beautiful function halls of different capacities ranging from 50 people to 1000 people seated on tables.
               </p>
               <p className="text-muted-foreground leading-relaxed">
-                Every day, our dedicated team of certified professionals works tirelessly to ensure that each client receives personalised attention and achieves measurable results on their wellness journey.
+                DMAC is currently finishing its Mhondoro Conference Centre. In Malaysia, DMAC has also started putting a big hospitality centre covering accommodation, restaurants and events. Our setting up in global destinations like Malaysia, Dubai and Rwanda shall also help local Zimbabwean employees have global experience through our interchange program.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="bg-amber-50 dark:bg-amber-900/20 p-6 rounded-md text-center">
-                <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">500+</p>
-                <p className="text-sm text-muted-foreground mt-1">Happy Clients</p>
+                <p className="text-3xl font-bold text-amber-600 dark:text-amber-400">7</p>
+                <p className="text-sm text-muted-foreground mt-1">Function Halls</p>
               </div>
               <div className="bg-green-50 dark:bg-green-900/20 p-6 rounded-md text-center">
-                <p className="text-3xl font-bold text-green-600 dark:text-green-400">5+</p>
-                <p className="text-sm text-muted-foreground mt-1">Years Experience</p>
+                <p className="text-3xl font-bold text-green-600 dark:text-green-400">1000+</p>
+                <p className="text-sm text-muted-foreground mt-1">Guest Capacity</p>
               </div>
               <div className="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-md text-center">
-                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">15+</p>
-                <p className="text-sm text-muted-foreground mt-1">Expert Staff</p>
+                <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">3</p>
+                <p className="text-sm text-muted-foreground mt-1">Global Locations</p>
               </div>
               <div className="bg-rose-50 dark:bg-rose-900/20 p-6 rounded-md text-center">
-                <p className="text-3xl font-bold text-rose-600 dark:text-rose-400">20+</p>
-                <p className="text-sm text-muted-foreground mt-1">Services Offered</p>
+                <p className="text-3xl font-bold text-rose-600 dark:text-rose-400">2000</p>
+                <p className="text-sm text-muted-foreground mt-1">Cinema Setup</p>
               </div>
             </div>
           </div>
@@ -77,31 +85,31 @@ export default function About() {
       <section className="py-16 sm:py-20 bg-muted/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-amber-600 dark:text-amber-400 font-medium text-sm uppercase tracking-wide">What Drives Us</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-4">Our Mission & Vision</h2>
+            <span className="text-amber-600 dark:text-amber-400 font-medium text-sm uppercase tracking-wide">Strategic Foundations</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-4">Vision & Values</h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             <Card className="p-8">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-md bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
-                  <Target className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+                  <Eye className="w-6 h-6 text-amber-600 dark:text-amber-400" />
                 </div>
-                <h3 className="text-xl font-bold">Our Mission</h3>
+                <h3 className="text-xl font-bold">Our Vision</h3>
               </div>
-              <p className="text-muted-foreground leading-relaxed">
-                To empower individuals to achieve their health and wellness goals through expert guidance, state-of-the-art facilities, and a supportive community. We strive to make holistic wellness accessible to everyone in Zimbabwe.
+              <p className="text-muted-foreground leading-relaxed italic text-lg">
+                "To become a leader in offering sustainable unique total hospitality service to our clients."
               </p>
             </Card>
             <Card className="p-8">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-12 h-12 rounded-md bg-green-50 dark:bg-green-900/20 flex items-center justify-center">
-                  <Eye className="w-6 h-6 text-green-600 dark:text-green-400" />
+                  <Target className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
-                <h3 className="text-xl font-bold">Our Vision</h3>
+                <h3 className="text-xl font-bold">Sustainability Statement</h3>
               </div>
               <p className="text-muted-foreground leading-relaxed">
-                To be the leading lifestyle and wellness centre in Southern Africa, recognised for our innovative approach to holistic health, exceptional service quality, and positive impact on communities.
+                Sustainability is the foundation of all DMAC's planning and corporate actions. We believe strongly that our business has an inseparable symbiotic relationship with our environment and our community. Doing business with us is helping our communities and our environment.
               </p>
             </Card>
           </div>
@@ -123,50 +131,71 @@ export default function About() {
       <section className="py-16 sm:py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <span className="text-amber-600 dark:text-amber-400 font-medium text-sm uppercase tracking-wide">Our People</span>
-            <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-4">Meet Our Team</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Our team of certified professionals is passionate about helping you achieve your wellness goals.</p>
+            <span className="text-amber-600 dark:text-amber-400 font-medium text-sm uppercase tracking-wide">CEO Message</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-4">From Our Leadership</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {team.map((member) => (
-              <Card key={member.name} className="overflow-visible group hover-elevate" data-testid={`card-team-${member.name.toLowerCase().replace(/\s/g, "-")}`}>
-                <div className="overflow-hidden rounded-t-md">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="h-56 w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
+          <Card className="p-8 max-w-3xl mx-auto">
+            <div className="flex flex-col sm:flex-row gap-6 items-start">
+              <div className="w-20 h-20 rounded-md bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center shrink-0">
+                <Users className="w-10 h-10 text-amber-600 dark:text-amber-400" />
+              </div>
+              <div>
+                <h3 className="text-lg font-bold mb-1">Vimbai Chakanetsa</h3>
+                <p className="text-sm text-muted-foreground mb-4">Chief Executive Officer</p>
+                <p className="text-muted-foreground leading-relaxed mb-3">
+                  "DMAC Zimbabwe Private Limited is the embodiment of sustainable business practice in Zimbabwe. Working with ZNA nurses, the organisation played a key role during Covid pandemic offering free vaccination to all southern suburbs and industries in Harare."
+                </p>
+                <p className="text-muted-foreground leading-relaxed">
+                  "Our actions are guided by our philosophy of 'living today for tomorrow'. Tourism is one sector that can be used as an agent for economic development and transformation because of its linkages to many sectors. As DMAC we shall endeavour to tap the vast untapped tourism potential in a sustainable way, minimising negative social, cultural and environmental impacts."
+                </p>
+              </div>
+            </div>
+          </Card>
+        </div>
+      </section>
+
+      <section className="py-16 sm:py-20 bg-muted/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <span className="text-amber-600 dark:text-amber-400 font-medium text-sm uppercase tracking-wide">Giving Back</span>
+            <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-4">Major CSR Projects</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">Our commitment to our communities and our environment drives everything we do.</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {csrProjects.map((project) => (
+              <Card key={project.title} className="p-6">
+                <div className="w-12 h-12 mb-4 rounded-md bg-green-50 dark:bg-green-900/20 flex items-center justify-center">
+                  <Heart className="w-6 h-6 text-green-600 dark:text-green-400" />
                 </div>
-                <div className="p-4 text-center">
-                  <h3 className="font-semibold">{member.name}</h3>
-                  <p className="text-sm text-muted-foreground">{member.role}</p>
-                </div>
+                <h3 className="font-semibold text-base mb-3" data-testid={`text-csr-${project.title.toLowerCase().replace(/\s/g, "-").slice(0, 20)}`}>{project.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{project.desc}</p>
               </Card>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16 sm:py-20 bg-muted/30">
+      <section className="py-16 sm:py-20 bg-background">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
             <span className="text-amber-600 dark:text-amber-400 font-medium text-sm uppercase tracking-wide">Find Us</span>
             <h2 className="text-3xl sm:text-4xl font-bold mt-2 mb-4">Our Location</h2>
-            <p className="text-muted-foreground">Visit us at our centre in Harare, Zimbabwe</p>
+            <p className="text-muted-foreground">Visit us at 40 James Martin Drive, Lochinvar, Harare</p>
           </div>
 
           <Card className="overflow-visible">
             <div className="overflow-hidden rounded-md">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d121059.04302284025!2d30.95!3d-17.83!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1931a4e706b17161%3A0x2968e0e3f4084c07!2sHarare%2C%20Zimbabwe!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3798.5!2d31.0!3d-17.87!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1931a4e706b17161%3A0x2968e0e3f4084c07!2sLochinvar%2C%20Harare%2C%20Zimbabwe!5e0!3m2!1sen!2sus!4v1700000000000!5m2!1sen!2sus"
                 width="100%"
                 height="450"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="DMAC Lifestyle Centre Location"
+                title="DMAC Lifestyle Centre - 40 James Martin Drive, Lochinvar, Harare"
                 data-testid="map-location"
                 className="rounded-md"
               />
@@ -176,15 +205,15 @@ export default function About() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-8">
             <Card className="p-5 text-center">
               <h4 className="font-semibold mb-1">Address</h4>
-              <p className="text-sm text-muted-foreground">Harare, Zimbabwe</p>
+              <p className="text-sm text-muted-foreground">40 James Martin Drive, Lochinvar, Harare</p>
             </Card>
             <Card className="p-5 text-center">
               <h4 className="font-semibold mb-1">Phone</h4>
               <p className="text-sm text-muted-foreground">+263 77 693 7172 / +263 77 859 8381</p>
             </Card>
             <Card className="p-5 text-center">
-              <h4 className="font-semibold mb-1">Hours</h4>
-              <p className="text-sm text-muted-foreground">Mon-Fri: 6AM-9PM | Sat-Sun: 7AM-6PM</p>
+              <h4 className="font-semibold mb-1">Email</h4>
+              <p className="text-sm text-muted-foreground">dmaczimbabwe@gmail.com</p>
             </Card>
           </div>
         </div>

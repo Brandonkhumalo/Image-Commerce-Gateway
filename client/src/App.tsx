@@ -9,7 +9,7 @@ import WhatsAppButton from "@/components/whatsapp-button";
 import Home from "@/pages/home";
 import Services from "@/pages/services";
 import About from "@/pages/about";
-import Shop from "@/pages/shop";
+import Packages from "@/pages/shop";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -18,7 +18,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/services" component={Services} />
       <Route path="/about" component={About} />
-      <Route path="/shop" component={Shop} />
+      <Route path="/packages" component={Packages} />
       <Route component={NotFound} />
     </Switch>
   );

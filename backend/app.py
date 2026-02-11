@@ -84,30 +84,34 @@ def seed_db():
     print("Seeding database...")
 
     services_data = [
-        (str(uuid.uuid4()), "Personal Fitness Training",
-         "One-on-one sessions with our certified personal trainers. Get a customised workout plan designed to help you reach your specific fitness goals, whether it's weight loss, muscle building, or improving overall health.",
-         "Customised one-on-one training sessions with certified professionals.",
-         45.00, "60 min", "/images/service-fitness.png", "Fitness", 1),
-        (str(uuid.uuid4()), "Group Fitness Classes",
-         "Join our energising group classes including HIIT, Zumba, aerobics, and circuit training. Perfect for those who thrive in a motivating group environment with expert-led routines.",
-         "High-energy group workouts led by expert instructors.",
-         15.00, "45 min", "/images/service-group.png", "Fitness", 0),
-        (str(uuid.uuid4()), "Yoga & Meditation",
-         "Find inner peace and flexibility with our yoga and meditation sessions. From beginner Hatha yoga to advanced Vinyasa flows, our instructors guide you through mindful practices for mental clarity and physical wellness.",
-         "Mindful yoga and meditation for inner peace and flexibility.",
-         25.00, "60 min", "/images/service-yoga.png", "Wellness", 1),
-        (str(uuid.uuid4()), "Spa & Massage Therapy",
-         "Relax and rejuvenate with our premium spa treatments. Choose from Swedish massage, deep tissue therapy, hot stone treatments, and aromatherapy sessions designed to melt away stress.",
-         "Premium spa treatments and therapeutic massage sessions.",
-         65.00, "90 min", "/images/service-spa.png", "Wellness", 1),
-        (str(uuid.uuid4()), "Nutritional Counselling",
-         "Work with our certified nutritionists to develop a personalised eating plan. Whether you want to lose weight, manage a health condition, or simply eat healthier, we'll guide you every step of the way.",
-         "Personalised meal plans and nutritional guidance.",
-         35.00, "45 min", "/images/service-nutrition.png", "Nutrition", 0),
-        (str(uuid.uuid4()), "Lifestyle Coaching",
-         "Our certified life coaches help you set and achieve meaningful goals. From career transitions to personal development, gain the tools and strategies needed to create the life you envision.",
-         "Goal-setting and personal development coaching.",
-         55.00, "60 min", "/images/service-coaching.png", "Coaching", 0),
+        (str(uuid.uuid4()), "Corporate Functions",
+         "DMAC Lifestyle Centre is pushing to be the best in offering corporate functions in Zimbabwe. With our global experience, we help ensure corporate functions are done in an environment and setup comparable to any other place in the world. We have 7 beautiful function halls of different capacities ranging from 50 to 1000 people seated on tables.",
+         "World-class corporate event hosting with 7 function halls seating up to 1000 guests.",
+         0, "Customised", "/images/service-corporate.png", "Corporate", 1),
+        (str(uuid.uuid4()), "Conferencing Facilities",
+         "DMAC offers second to none conferencing facilities with state of the art conference equipment and accessories which meet global standards. Our halls can accommodate from intimate boardroom meetings to large-scale conferences with up to 2000 guests in cinema setup.",
+         "State-of-the-art conference equipment meeting global standards.",
+         0, "Customised", "/images/service-conference.png", "Corporate", 1),
+        (str(uuid.uuid4()), "Academic Functions",
+         "DMAC Lifestyle Centre offers a wide range of academic functions from graduations, prefect trainings, inductions, team building activities, leavers parties and anything related to the field of academics. We provide the perfect setting to celebrate educational milestones.",
+         "Graduations, trainings, inductions, and academic celebrations.",
+         0, "Customised", "/images/service-academic.png", "Academic", 1),
+        (str(uuid.uuid4()), "Social Functions",
+         "We offer a range of social functions including weddings, marooro functions, picnics, engagements, birthday parties and any other social celebrations. Our packages range from Silver, Gold and Platinum to suit every budget and occasion.",
+         "Weddings, engagements, birthdays, and social celebrations with Silver, Gold & Platinum packages.",
+         0, "Customised", "/images/service-social.png", "Social", 1),
+        (str(uuid.uuid4()), "Team Building Activities",
+         "DMAC provides comprehensive team building activities for all corporates. Our experienced facilitators design engaging programmes that foster teamwork, communication, and leadership skills in a beautiful outdoor and indoor setting.",
+         "Professional team building programmes for corporates.",
+         0, "Customised", "/images/service-teambuilding.png", "Corporate", 0),
+        (str(uuid.uuid4()), "Restaurant & Dining",
+         "Our restaurant offers a variety of food offerings from traditional Zimbabwean cuisine to international dishes. Whether it is a formal dinner, buffet, or cocktail event, our culinary team delivers exceptional dining experiences.",
+         "Diverse cuisine from traditional Zimbabwean to international dishes.",
+         0, "Customised", "/images/service-restaurant.png", "Hospitality", 0),
+        (str(uuid.uuid4()), "Accommodation",
+         "DMAC provides comfortable and well-appointed accommodation for guests attending events or visiting Harare. Our rooms are designed with modern amenities to ensure a pleasant stay during your time with us.",
+         "Comfortable, modern accommodation for event guests and visitors.",
+         0, "Customised", "/images/service-accommodation.png", "Hospitality", 0),
     ]
 
     conn.executemany(
@@ -116,24 +120,24 @@ def seed_db():
     )
 
     products_data = [
-        (str(uuid.uuid4()), "Premium Essential Oils Set",
-         "A curated collection of 6 therapeutic essential oils including lavender, eucalyptus, peppermint, tea tree, lemon, and frankincense. Perfect for aromatherapy and self-care.",
-         42.00, "/images/product-oils.png", "Wellness", 1),
-        (str(uuid.uuid4()), "Organic Protein Blend",
-         "Plant-based protein powder made from pea, rice, and hemp proteins. 25g protein per serving. Vanilla flavour. No artificial additives.",
-         38.00, "/images/product-protein.png", "Nutrition", 1),
-        (str(uuid.uuid4()), "Premium Yoga Mat",
-         "Non-slip, eco-friendly yoga mat with alignment markings. Extra thick 6mm cushioning for joint comfort. Comes with carrying strap.",
-         55.00, "/images/product-yogamat.png", "Fitness", 1),
-        (str(uuid.uuid4()), "Organic Herbal Tea Collection",
-         "A selection of 5 premium herbal teas: chamomile calm, green detox, ginger immunity, rooibos energy, and hibiscus beauty. 20 bags each.",
-         28.00, "/images/product-tea.png", "Nutrition", 1),
-        (str(uuid.uuid4()), "Natural Skincare Set",
-         "Complete organic skincare routine with cleanser, toner, serum, and moisturiser. Made with natural ingredients. Suitable for all skin types.",
-         68.00, "/images/product-skincare.png", "Wellness", 1),
-        (str(uuid.uuid4()), "Superfood Smoothie Bowl Mix",
-         "Blend of acai, spirulina, maca, and mixed berries. Just add your favourite milk and toppings for a nutritious breakfast bowl. 15 servings.",
-         32.00, "/images/product-smoothie.png", "Nutrition", 1),
+        (str(uuid.uuid4()), "Silver Wedding Package",
+         "Our Silver package includes venue hire for one function hall (up to 100 guests), basic decor and table setup, sound system, and a standard buffet menu. Perfect for intimate celebrations.",
+         1500.00, "/images/service-social.png", "Wedding Packages", 1),
+        (str(uuid.uuid4()), "Gold Wedding Package",
+         "Our Gold package includes venue hire for a larger function hall (up to 300 guests), premium decor with floral arrangements, professional sound and lighting, a premium buffet menu, and a complimentary cocktail hour.",
+         3500.00, "/images/service-social.png", "Wedding Packages", 1),
+        (str(uuid.uuid4()), "Platinum Wedding Package",
+         "Our Platinum package is the ultimate wedding experience with our largest hall (up to 1000 guests), luxury decor and floral design, full AV setup, a gourmet plated dinner, open bar, accommodation for the bridal party, and dedicated event coordinator.",
+         7500.00, "/images/service-social.png", "Wedding Packages", 1),
+        (str(uuid.uuid4()), "Corporate Conference Package",
+         "Full-day conference package including venue hire, state-of-the-art AV equipment, projector and screen, high-speed WiFi, tea/coffee breaks, and a business lunch. Capacity up to 500 delegates.",
+         2000.00, "/images/service-conference.png", "Corporate Packages", 1),
+        (str(uuid.uuid4()), "Team Building Package",
+         "Complete team building experience including venue, professional facilitators, indoor and outdoor activities, all equipment, lunch, and refreshments. Customised programmes for groups of 20 to 200 people.",
+         1200.00, "/images/service-teambuilding.png", "Corporate Packages", 1),
+        (str(uuid.uuid4()), "Graduation Celebration Package",
+         "Celebrate your academic achievement with our graduation package. Includes venue hire, stage setup, sound system, photography area, and a celebratory buffet for up to 200 guests.",
+         1800.00, "/images/service-academic.png", "Academic Packages", 1),
     ]
 
     conn.executemany(
@@ -142,12 +146,12 @@ def seed_db():
     )
 
     testimonials_data = [
-        (str(uuid.uuid4()), "Tatenda Mhizha", "Fitness Client",
-         "DMAC has completely transformed my approach to health. The personal training sessions are incredible, and I've lost 15kg in just 6 months. The team truly cares about your progress.", 5),
-        (str(uuid.uuid4()), "Rumbidzai Choto", "Wellness Member",
-         "The yoga and spa services are world-class. I come here every week for my meditation sessions and leave feeling completely refreshed. It's my sanctuary in Harare.", 5),
-        (str(uuid.uuid4()), "Farai Dube", "Nutrition Client",
-         "The nutritional counselling changed my life. My energy levels are through the roof and I feel healthier than ever. The team creates plans that actually work for real Zimbabwean diets.", 5),
+        (str(uuid.uuid4()), "Tendai Moyo", "Corporate Client",
+         "DMAC hosted our annual company conference and the experience was world-class. The venue was stunning, the AV equipment flawless, and the catering was exceptional. Our delegates were thoroughly impressed.", 5),
+        (str(uuid.uuid4()), "Rumbidzai Choto", "Wedding Client",
+         "Our wedding at DMAC was a dream come true. The Gold package exceeded all our expectations. The decor was breathtaking and the team handled every detail with professionalism. We could not have asked for a better venue.", 5),
+        (str(uuid.uuid4()), "Professor Farai Dube", "Academic Client",
+         "We have hosted multiple graduation ceremonies at DMAC and each time the experience has been outstanding. The function halls are spacious, well-equipped, and the staff are incredibly accommodating. Highly recommended for academic events.", 5),
     ]
 
     conn.executemany(
@@ -274,7 +278,7 @@ def checkout():
 
             host = request.host_url.rstrip("/")
             result_url = f"{host}/api/orders/paynow-result"
-            return_url = f"{host}/shop?order={order_id}"
+            return_url = f"{host}/packages?order={order_id}"
             paynow = Paynow(integration_id, integration_key, return_url, result_url)
 
             payment = paynow.create_payment(f"Order-{order_id}", customer_email)
@@ -360,7 +364,7 @@ def get_order_status(order_id):
             paynow = Paynow(
                 os.environ.get("PAYNOW_INTEGRATION_ID", ""),
                 os.environ.get("PAYNOW_INTEGRATION_KEY", ""),
-                f"{host}/shop",
+                f"{host}/packages",
                 f"{host}/api/orders/paynow-result"
             )
             status = paynow.check_transaction_status(order_dict["poll_url"])

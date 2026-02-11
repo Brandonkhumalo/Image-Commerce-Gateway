@@ -12,6 +12,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -22,7 +23,7 @@ interface CartItem {
   quantity: number;
 }
 
-export default function Shop() {
+export default function Packages() {
   const { toast } = useToast();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
@@ -45,7 +46,7 @@ export default function Shop() {
       }
       return [...prev, { product, quantity: 1 }];
     });
-    toast({ title: `${product.name} added to cart` });
+    toast({ title: `${product.name} added to enquiry` });
   };
 
   const updateQuantity = (productId: string, delta: number) => {
@@ -104,13 +105,13 @@ export default function Shop() {
     <div>
       <section className="relative py-20 sm:py-28 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/images/product-oils.png" alt="" className="w-full h-full object-cover" />
+          <img src="/images/service-social.png" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <span className="text-amber-400 font-medium text-sm uppercase tracking-wide">Premium Products</span>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white mt-2 mb-4">Our Shop</h1>
-          <p className="text-gray-300 max-w-xl text-lg">Curated wellness products to support your healthy lifestyle journey. All products are carefully selected for quality.</p>
+          <span className="text-amber-400 font-medium text-sm uppercase tracking-wide">Event Packages</span>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white mt-2 mb-4">Our Packages</h1>
+          <p className="text-gray-300 max-w-xl text-lg">Choose from our curated event packages for weddings, corporate conferences, team building, and academic celebrations. Silver, Gold, and Platinum options available.</p>
         </div>
       </section>
 
@@ -119,12 +120,12 @@ export default function Shop() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between gap-4 flex-wrap">
             <div className="flex items-center gap-3">
               <ShoppingCart className="w-5 h-5 text-amber-600 dark:text-amber-400" />
-              <span className="font-medium text-sm" data-testid="text-cart-count">{cartCount} item{cartCount !== 1 ? "s" : ""} in cart</span>
+              <span className="font-medium text-sm" data-testid="text-cart-count">{cartCount} package{cartCount !== 1 ? "s" : ""} selected</span>
               <span className="text-amber-600 dark:text-amber-400 font-bold">${totalAmount.toFixed(2)}</span>
             </div>
             <Button onClick={() => setCheckoutOpen(true)} data-testid="button-open-checkout">
               <CreditCard className="w-4 h-4 mr-2" />
-              Checkout
+              Book Now
             </Button>
           </div>
         </div>
@@ -168,7 +169,7 @@ export default function Shop() {
                             />
                             {!product.inStock && (
                               <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
-                                <Badge variant="destructive">Out of Stock</Badge>
+                                <Badge variant="destructive">Unavailable</Badge>
                               </div>
                             )}
                           </div>
@@ -177,7 +178,7 @@ export default function Shop() {
                             <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{product.description}</p>
                             <div className="flex items-center justify-between gap-2 flex-wrap">
                               <span className="text-xl font-bold text-amber-600 dark:text-amber-400" data-testid={`text-price-${product.id}`}>
-                                ${product.price}
+                                ${Number(product.price).toLocaleString()}
                               </span>
                               {inCart ? (
                                 <div className="flex items-center gap-2">
@@ -195,7 +196,7 @@ export default function Shop() {
                                   disabled={!product.inStock}
                                   data-testid={`button-add-to-cart-${product.id}`}
                                 >
-                                  <Plus className="w-4 h-4 mr-1" /> Add to Cart
+                                  <Plus className="w-4 h-4 mr-1" /> Select
                                 </Button>
                               )}
                             </div>
@@ -214,8 +215,11 @@ export default function Shop() {
         <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {paymentResult ? (paymentResult.success ? "Payment Ready" : "Payment Error") : "Checkout"}
+              {paymentResult ? (paymentResult.success ? "Booking Confirmed" : "Booking Error") : "Book Packages"}
             </DialogTitle>
+            <DialogDescription>
+              {paymentResult ? "Your booking status" : "Complete your booking details below"}
+            </DialogDescription>
           </DialogHeader>
 
           {paymentResult ? (
@@ -223,7 +227,7 @@ export default function Shop() {
               {paymentResult.success ? (
                 <>
                   <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Order Created Successfully</h3>
+                  <h3 className="text-lg font-semibold mb-2">Booking Created Successfully</h3>
                   <p className="text-sm text-muted-foreground mb-6">Click below to complete your payment via Paynow.</p>
                   <a href={paymentResult.redirectUrl} target="_blank" rel="noopener noreferrer">
                     <Button className="w-full" data-testid="button-pay-now">
@@ -247,7 +251,7 @@ export default function Shop() {
               ) : (
                 <>
                   <AlertCircle className="w-16 h-16 text-destructive mx-auto mb-4" />
-                  <h3 className="text-lg font-semibold mb-2">Payment Error</h3>
+                  <h3 className="text-lg font-semibold mb-2">Booking Error</h3>
                   <p className="text-sm text-muted-foreground mb-6">{paymentResult.error || "Something went wrong. Please try again or contact us via WhatsApp."}</p>
                   <Button onClick={() => setPaymentResult(null)} className="w-full" data-testid="button-try-again">
                     Try Again
@@ -263,9 +267,9 @@ export default function Shop() {
                     <img src={item.product.image} alt={item.product.name} className="w-12 h-12 rounded-md object-cover shrink-0" />
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{item.product.name}</p>
-                      <p className="text-xs text-muted-foreground">${item.product.price} x {item.quantity}</p>
+                      <p className="text-xs text-muted-foreground">${Number(item.product.price).toLocaleString()} x {item.quantity}</p>
                     </div>
-                    <span className="text-sm font-semibold shrink-0">${(Number(item.product.price) * item.quantity).toFixed(2)}</span>
+                    <span className="text-sm font-semibold shrink-0">${(Number(item.product.price) * item.quantity).toLocaleString()}</span>
                     <Button size="icon" variant="ghost" onClick={() => removeFromCart(item.product.id)} data-testid={`button-remove-${item.product.id}`}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -276,7 +280,7 @@ export default function Shop() {
               <div className="border-t pt-3 mb-6">
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-semibold">Total</span>
-                  <span className="text-xl font-bold text-amber-600 dark:text-amber-400" data-testid="text-checkout-total">${totalAmount.toFixed(2)}</span>
+                  <span className="text-xl font-bold text-amber-600 dark:text-amber-400" data-testid="text-checkout-total">${totalAmount.toLocaleString()}</span>
                 </div>
               </div>
 
@@ -326,7 +330,7 @@ export default function Shop() {
                   </>
                 ) : (
                   <>
-                    <CreditCard className="w-4 h-4 mr-2" /> Pay with Paynow - ${totalAmount.toFixed(2)}
+                    <CreditCard className="w-4 h-4 mr-2" /> Pay with Paynow - ${totalAmount.toLocaleString()}
                   </>
                 )}
               </Button>

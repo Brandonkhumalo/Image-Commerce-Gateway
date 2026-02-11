@@ -1,7 +1,7 @@
 # DMAC Lifestyle Centre Website
 
 ## Overview
-A 4-page website for DMAC Lifestyle Centre, a holistic wellness and fitness centre based in Harare, Zimbabwe. Features Paynow Zimbabwe payment gateway integration for the shop.
+A 4-page website for DMAC Lifestyle Centre, a hospitality and events company based at 40 James Martin Drive, Lochinvar, Harare, Zimbabwe. DMAC Zimbabwe is a subsidiary of DMAC Dubai. Features Paynow Zimbabwe payment gateway integration for event package bookings, WhatsApp contact with two phone numbers, and Google Maps location display.
 
 ## Architecture
 - **Frontend**: React + TypeScript + Vite + TailwindCSS + shadcn/ui
@@ -12,16 +12,26 @@ A 4-page website for DMAC Lifestyle Centre, a holistic wellness and fitness cent
 
 ## Pages
 1. **Home** (`/`) - Hero section, featured services, about preview, testimonials, CTA
-2. **Services** (`/services`) - All services by category with pricing and details
-3. **About Us** (`/about`) - Company story, mission/vision, team, Google Maps location
-4. **Shop** (`/shop`) - Products with cart, Paynow checkout
+2. **Services** (`/services`) - All services by category: Corporate, Academic, Social, Hospitality
+3. **About Us** (`/about`) - Company profile (subsidiary of DMAC Dubai), CEO message (Vimbai Chakanetsa), vision/values, CSR projects, Google Maps location
+4. **Packages** (`/packages`) - Event packages (Silver/Gold/Platinum wedding, corporate conference, team building, graduation) with cart and Paynow checkout
 
 ## Key Features
 - WhatsApp floating button (bottom-right) with two contact numbers: +263776937172 and +263778598381
-- Paynow Zimbabwe payment gateway for product checkout
-- Google Maps embedded on About page
+- Paynow Zimbabwe payment gateway for event package booking
+- Google Maps embedded on About page (Lochinvar, Harare)
 - Responsive design with dark/light mode support
 - SEO meta tags
+
+## Company Information (from PDF)
+- **CEO**: Vimbai Chakanetsa
+- **Vision**: "To become a leader in offering sustainable unique total hospitality service"
+- **Core Values**: Excellence, Innovation, Integrity, Teamwork
+- **Services**: Corporate Functions, Conferencing, Academic Functions, Social Functions (weddings), Team Building, Restaurant, Accommodation
+- **Venues**: 7 function halls, capacities 50-1000 seated, up to 2000 cinema setup
+- **Address**: 40 James Martin Drive, Lochinvar, Harare
+- **Email**: dmaczimbabwe@gmail.com
+- **Global presence**: Dubai, Malaysia, Rwanda
 
 ## Environment Variables Required
 - `PAYNOW_INTEGRATION_ID` - Paynow merchant Integration ID (secret)
@@ -35,10 +45,13 @@ A 4-page website for DMAC Lifestyle Centre, a holistic wellness and fitness cent
 - `backend/dmac.db` - SQLite database file (auto-created on first run)
 
 ### Frontend (React + TypeScript)
-- `client/src/pages/` - 4 main pages (home, services, about, shop)
+- `client/src/pages/home.tsx` - Home page with hero, featured services, about preview, testimonials
+- `client/src/pages/services.tsx` - Services page by category
+- `client/src/pages/about.tsx` - About page with company profile, CEO, CSR, map
+- `client/src/pages/shop.tsx` - Packages page (event packages with Paynow checkout)
 - `client/src/components/` - Shared components (navbar, footer, whatsapp-button)
 - `client/src/types.ts` - TypeScript type definitions for API data
-- `client/public/images/` - Product and service images
+- `client/public/images/` - Generated venue and event images
 
 ### Dev Server (Express proxy)
 - `server/routes.ts` - Starts Flask subprocess and proxies /api/* requests to Flask on port 5001
@@ -47,10 +60,10 @@ A 4-page website for DMAC Lifestyle Centre, a holistic wellness and fitness cent
 - `server/static.ts` - Production static file serving
 
 ### Database Tables (SQLite)
-- `services` - Fitness, wellness, nutrition, coaching services
-- `products` - Shop products (oils, protein, yoga mat, tea, skincare, smoothie mix)
-- `orders` - Customer orders with Paynow payment status
-- `order_items` - Individual items in each order
+- `services` - Hospitality services (corporate, conferencing, academic, social, team building, restaurant, accommodation)
+- `products` - Event packages (Silver/Gold/Platinum wedding, corporate conference, team building, graduation)
+- `orders` - Customer bookings with Paynow payment status
+- `order_items` - Individual packages in each booking
 - `testimonials` - Client testimonials with ratings
 
 ## Deployment
@@ -63,3 +76,4 @@ A 4-page website for DMAC Lifestyle Centre, a holistic wellness and fitness cent
 - Brand colors: Navy blue, gold/amber, green, red (from logo)
 - Font: Poppins
 - Contact: WhatsApp (+263776937172, +263778598381)
+- Email: dmaczimbabwe@gmail.com

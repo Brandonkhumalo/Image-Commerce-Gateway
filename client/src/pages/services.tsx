@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Clock, DollarSign } from "lucide-react";
+import { Clock, Users } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -16,13 +16,13 @@ export default function Services() {
     <div>
       <section className="relative py-20 sm:py-28 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/images/service-yoga.png" alt="" className="w-full h-full object-cover" />
+          <img src="/images/service-corporate.png" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <span className="text-amber-400 font-medium text-sm uppercase tracking-wide">Our Offerings</span>
           <h1 className="text-4xl sm:text-5xl font-bold text-white mt-2 mb-4">Our Services</h1>
-          <p className="text-gray-300 max-w-xl text-lg">Comprehensive wellness solutions tailored to your unique journey. Discover the perfect programme to transform your lifestyle.</p>
+          <p className="text-gray-300 max-w-xl text-lg">World-class hospitality services for corporate functions, conferences, weddings, academic events, and more.</p>
         </div>
       </section>
 
@@ -72,16 +72,16 @@ export default function Services() {
                             </div>
                             <p className="text-sm text-muted-foreground mb-4 flex-1 leading-relaxed">{service.description}</p>
                             <div className="flex items-center gap-4 flex-wrap">
-                              <div className="flex items-center gap-1.5 text-sm">
-                                <DollarSign className="w-4 h-4 text-amber-600 dark:text-amber-400" />
-                                <span className="font-semibold">${service.price}</span>
-                              </div>
                               {service.duration && (
                                 <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
                                   <Clock className="w-4 h-4" />
                                   <span>{service.duration}</span>
                                 </div>
                               )}
+                              <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                                <Users className="w-4 h-4" />
+                                <span>Contact for pricing</span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -96,19 +96,19 @@ export default function Services() {
 
       <section className="relative py-16 sm:py-20 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/images/service-spa.png" alt="" className="w-full h-full object-cover" />
+          <img src="/images/service-social.png" alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/70" />
         </div>
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Book Your Session Today</h2>
-          <p className="text-gray-300 mb-6">Contact us via WhatsApp to book any of our services. Our team is ready to help you get started on your wellness journey.</p>
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">Plan Your Event With Us</h2>
+          <p className="text-gray-300 mb-6">Contact us via WhatsApp to discuss your event requirements. Our experienced team will help you create an unforgettable experience.</p>
           <a
-            href="https://wa.me/263776937172?text=Hello%20DMAC%20Lifestyle%20Centre!%20I%20would%20like%20to%20book%20a%20session."
+            href="https://wa.me/263776937172?text=Hello%20DMAC!%20I%20would%20like%20to%20enquire%20about%20your%20services."
             target="_blank"
             rel="noopener noreferrer"
           >
             <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-md font-semibold transition-colors" data-testid="button-book-whatsapp">
-              Book via WhatsApp
+              Enquire via WhatsApp
             </button>
           </a>
         </div>

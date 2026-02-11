@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { MapPin, Phone, Clock } from "lucide-react";
+import { MapPin, Phone, Mail } from "lucide-react";
 import { SiWhatsapp, SiFacebook, SiInstagram } from "react-icons/si";
 import logoPath from "@assets/dmac_logo_1770835060703.jpeg";
 
@@ -17,7 +17,7 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-sm opacity-80 leading-relaxed">
-              Your premier destination for holistic wellness, fitness, and lifestyle transformation in Harare, Zimbabwe.
+              Your premier destination for world-class corporate functions, conferences, weddings, and events in Harare, Zimbabwe.
             </p>
           </div>
 
@@ -27,7 +27,7 @@ export default function Footer() {
               <Link href="/" className="text-sm opacity-80 hover:opacity-100 transition-opacity">Home</Link>
               <Link href="/services" className="text-sm opacity-80 hover:opacity-100 transition-opacity">Services</Link>
               <Link href="/about" className="text-sm opacity-80 hover:opacity-100 transition-opacity">About Us</Link>
-              <Link href="/shop" className="text-sm opacity-80 hover:opacity-100 transition-opacity">Shop</Link>
+              <Link href="/packages" className="text-sm opacity-80 hover:opacity-100 transition-opacity">Packages</Link>
             </div>
           </div>
 
@@ -43,14 +43,11 @@ export default function Footer() {
               </div>
               <div className="flex items-start gap-2">
                 <MapPin className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
-                <p className="text-sm opacity-80">Harare, Zimbabwe</p>
+                <p className="text-sm opacity-80">40 James Martin Drive, Lochinvar, Harare</p>
               </div>
               <div className="flex items-start gap-2">
-                <Clock className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
-                <div className="text-sm opacity-80">
-                  <p>Mon - Fri: 6:00 AM - 9:00 PM</p>
-                  <p>Sat - Sun: 7:00 AM - 6:00 PM</p>
-                </div>
+                <Mail className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
+                <p className="text-sm opacity-80">dmaczimbabwe@gmail.com</p>
               </div>
             </div>
           </div>
