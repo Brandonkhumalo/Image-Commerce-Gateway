@@ -33,7 +33,7 @@ export default function Shop() {
     queryKey: ["/api/products"],
   });
 
-  const categories = [...new Set(products?.map((p) => p.category) || [])];
+  const categories = Array.from(new Set(products?.map((p) => p.category) || []));
 
   const addToCart = (product: Product) => {
     setCart((prev) => {

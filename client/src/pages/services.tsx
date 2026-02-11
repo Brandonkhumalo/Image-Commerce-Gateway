@@ -10,7 +10,7 @@ export default function Services() {
     queryKey: ["/api/services"],
   });
 
-  const categories = [...new Set(services?.map((s) => s.category) || [])];
+  const categories = Array.from(new Set(services?.map((s) => s.category) || []));
 
   return (
     <div>
