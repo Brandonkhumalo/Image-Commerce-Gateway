@@ -1,171 +1,107 @@
-import type { Express } from "express";
-import { createServer, type Server } from "http";
-import { storage } from "./storage";
-import { seedDatabase } from "./seed";
+import type { Express, Request, Response } from "express";
+import { type Server } from "http";
+import { spawn } from "child_process";
+import http from "http";
+
+let flaskProcess: ReturnType<typeof spawn> | null = null;
+
+function startFlask(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const flaskPort = "5001";
+    const env = { ...process.env, FLASK_PORT: flaskPort };
+
+    flaskProcess = spawn("python3", ["server/app.py"], {
+      env,
+      stdio: ["pipe", "pipe", "pipe"],
+    });
+
+    flaskProcess.stdout?.on("data", (data: Buffer) => {
+      const msg = data.toString().trim();
+      if (msg) console.log(`[flask] ${msg}`);
+    });
+
+    flaskProcess.stderr?.on("data", (data: Buffer) => {
+      const msg = data.toString().trim();
+      if (msg) console.log(`[flask] ${msg}`);
+    });
+
+    flaskProcess.on("error", (err) => {
+      console.error("[flask] Failed to start:", err.message);
+      reject(err);
+    });
+
+    flaskProcess.on("exit", (code) => {
+      console.log(`[flask] Process exited with code ${code}`);
+    });
+
+    const checkFlask = (attempts: number) => {
+      if (attempts <= 0) {
+        reject(new Error("Flask failed to start"));
+        return;
+      }
+      const req = http.get(`http://127.0.0.1:${flaskPort}/api/services`, (res) => {
+        res.resume();
+        resolve();
+      });
+      req.on("error", () => {
+        setTimeout(() => checkFlask(attempts - 1), 500);
+      });
+      req.end();
+    };
+
+    setTimeout(() => checkFlask(20), 1000);
+  });
+}
+
+function proxyToFlask(req: Request, res: Response) {
+  const options: http.RequestOptions = {
+    hostname: "127.0.0.1",
+    port: 5001,
+    path: req.originalUrl,
+    method: req.method,
+    headers: {
+      ...req.headers,
+      host: "127.0.0.1:5001",
+    },
+  };
+
+  const proxyReq = http.request(options, (proxyRes) => {
+    res.writeHead(proxyRes.statusCode || 500, proxyRes.headers);
+    proxyRes.pipe(res, { end: true });
+  });
+
+  proxyReq.on("error", (err) => {
+    console.error("[proxy] Error:", err.message);
+    if (!res.headersSent) {
+      res.status(502).json({ error: "Flask backend unavailable" });
+    }
+  });
+
+  if (req.body && Object.keys(req.body).length > 0) {
+    const bodyStr = JSON.stringify(req.body);
+    proxyReq.setHeader("Content-Type", "application/json");
+    proxyReq.setHeader("Content-Length", Buffer.byteLength(bodyStr));
+    proxyReq.write(bodyStr);
+  }
+
+  proxyReq.end();
+}
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  await seedDatabase();
+  await startFlask();
+  console.log("[flask] Backend ready on port 5001");
 
-  app.get("/api/services", async (_req, res) => {
-    const services = await storage.getServices();
-    res.json(services);
-  });
-
-  app.get("/api/services/:id", async (req, res) => {
-    const service = await storage.getService(req.params.id);
-    if (!service) return res.status(404).json({ message: "Service not found" });
-    res.json(service);
-  });
-
-  app.get("/api/products", async (_req, res) => {
-    const products = await storage.getProducts();
-    res.json(products);
-  });
-
-  app.get("/api/products/:id", async (req, res) => {
-    const product = await storage.getProduct(req.params.id);
-    if (!product) return res.status(404).json({ message: "Product not found" });
-    res.json(product);
-  });
-
-  app.get("/api/testimonials", async (_req, res) => {
-    const testimonials = await storage.getTestimonials();
-    res.json(testimonials);
-  });
-
-  app.post("/api/orders/checkout", async (req, res) => {
-    try {
-      const { customerName, customerEmail, customerPhone, items } = req.body;
-
-      if (!customerName || !customerEmail || !customerPhone || !items?.length) {
-        return res.status(400).json({ error: "Missing required fields" });
-      }
-
-      const totalAmount = items.reduce(
-        (sum: number, item: any) => sum + Number(item.price) * item.quantity,
-        0
-      );
-
-      const order = await storage.createOrder({
-        customerName,
-        customerEmail,
-        customerPhone,
-        totalAmount: totalAmount.toFixed(2),
-      });
-
-      for (const item of items) {
-        await storage.createOrderItem({
-          orderId: order.id,
-          productId: item.productId,
-          productName: item.productName,
-          quantity: item.quantity,
-          price: item.price,
-        });
-      }
-
-      try {
-        const { Paynow } = require("paynow");
-
-        const integrationId = process.env.PAYNOW_INTEGRATION_ID;
-        const integrationKey = process.env.PAYNOW_INTEGRATION_KEY;
-
-        if (!integrationId || !integrationKey) {
-          await storage.updateOrder(order.id, { status: "pending_payment" });
-          return res.json({
-            orderId: order.id,
-            error: "Payment gateway not configured. Please contact us via WhatsApp to complete your order.",
-          });
-        }
-
-        const paynow = new Paynow(integrationId, integrationKey);
-        paynow.resultUrl = `${req.protocol}://${req.get("host")}/api/orders/paynow-result`;
-        paynow.returnUrl = `${req.protocol}://${req.get("host")}/shop?order=${order.id}`;
-
-        const payment = paynow.createPayment(`Order-${order.id}`, customerEmail);
-
-        for (const item of items) {
-          payment.add(item.productName, Number(item.price) * item.quantity);
-        }
-
-        const response = await paynow.send(payment);
-
-        if (response.success) {
-          await storage.updateOrder(order.id, {
-            status: "awaiting_payment",
-            pollUrl: response.pollUrl,
-            paynowReference: response.pollUrl,
-          });
-
-          return res.json({
-            orderId: order.id,
-            redirectUrl: response.redirectUrl,
-            pollUrl: response.pollUrl,
-          });
-        } else {
-          await storage.updateOrder(order.id, { status: "payment_failed" });
-          return res.json({
-            orderId: order.id,
-            error: response.error || "Payment initiation failed. Please try again.",
-          });
-        }
-      } catch (paymentError: any) {
-        console.error("Paynow error:", paymentError);
-        await storage.updateOrder(order.id, { status: "pending_payment" });
-        return res.json({
-          orderId: order.id,
-          error: "Payment gateway unavailable. Please contact us via WhatsApp to complete your order.",
-        });
-      }
-    } catch (error: any) {
-      console.error("Checkout error:", error);
-      return res.status(500).json({ error: "Failed to process order" });
-    }
-  });
-
-  app.post("/api/orders/paynow-result", async (req, res) => {
-    try {
-      const { pollurl, status } = req.body;
-      if (pollurl) {
-        const allOrders = await storage.getOrders();
-        const order = allOrders.find((o) => o.pollUrl === pollurl);
-        if (order) {
-          const newStatus = status?.toLowerCase() === "paid" ? "paid" : status?.toLowerCase() || "unknown";
-          await storage.updateOrder(order.id, { status: newStatus });
-        }
-      }
-      res.sendStatus(200);
-    } catch (error) {
-      console.error("Paynow result error:", error);
-      res.sendStatus(500);
-    }
-  });
-
-  app.get("/api/orders/:id/status", async (req, res) => {
-    const order = await storage.getOrder(req.params.id);
-    if (!order) return res.status(404).json({ message: "Order not found" });
-
-    if (order.pollUrl && order.status === "awaiting_payment") {
-      try {
-        const { Paynow } = require("paynow");
-        const paynow = new Paynow(
-          process.env.PAYNOW_INTEGRATION_ID || "",
-          process.env.PAYNOW_INTEGRATION_KEY || ""
-        );
-        const status = await paynow.pollTransaction(order.pollUrl);
-        if (status.paid()) {
-          await storage.updateOrder(order.id, { status: "paid" });
-          order.status = "paid";
-        }
-      } catch (e) {
-        console.error("Poll error:", e);
-      }
-    }
-
-    res.json({ status: order.status });
-  });
+  app.get("/api/services", proxyToFlask);
+  app.get("/api/services/:id", proxyToFlask);
+  app.get("/api/products", proxyToFlask);
+  app.get("/api/products/:id", proxyToFlask);
+  app.get("/api/testimonials", proxyToFlask);
+  app.post("/api/orders/checkout", proxyToFlask);
+  app.post("/api/orders/paynow-result", proxyToFlask);
+  app.get("/api/orders/:id/status", proxyToFlask);
 
   return httpServer;
 }
