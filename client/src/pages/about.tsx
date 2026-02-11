@@ -90,28 +90,36 @@ export default function About() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-            <Card className="p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-md bg-amber-50 dark:bg-amber-900/20 flex items-center justify-center">
-                  <Eye className="w-6 h-6 text-amber-600 dark:text-amber-400" />
+            <div className="relative rounded-md overflow-hidden group min-h-[280px]">
+              <img src="/images/value-vision.png" alt="Our Vision" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/25" />
+              <div className="relative z-10 h-full flex flex-col justify-end p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-md bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                    <Eye className="w-6 h-6 text-amber-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Our Vision</h3>
                 </div>
-                <h3 className="text-xl font-bold">Our Vision</h3>
+                <p className="text-gray-200 leading-relaxed italic text-lg">
+                  "To become a leader in offering sustainable unique total hospitality service to our clients."
+                </p>
               </div>
-              <p className="text-muted-foreground leading-relaxed italic text-lg">
-                "To become a leader in offering sustainable unique total hospitality service to our clients."
-              </p>
-            </Card>
-            <Card className="p-8">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 rounded-md bg-green-50 dark:bg-green-900/20 flex items-center justify-center">
-                  <Target className="w-6 h-6 text-green-600 dark:text-green-400" />
+            </div>
+            <div className="relative rounded-md overflow-hidden group min-h-[280px]">
+              <img src="/images/value-sustainability.png" alt="Sustainability" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/25" />
+              <div className="relative z-10 h-full flex flex-col justify-end p-8">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-12 h-12 rounded-md bg-white/15 backdrop-blur-sm flex items-center justify-center">
+                    <Target className="w-6 h-6 text-green-400" />
+                  </div>
+                  <h3 className="text-xl font-bold text-white">Sustainability Statement</h3>
                 </div>
-                <h3 className="text-xl font-bold">Sustainability Statement</h3>
+                <p className="text-gray-200 leading-relaxed">
+                  Sustainability is the foundation of all DMAC's planning and corporate actions. We believe strongly that our business has an inseparable symbiotic relationship with our environment and our community. Doing business with us is helping our communities and our environment.
+                </p>
               </div>
-              <p className="text-muted-foreground leading-relaxed">
-                Sustainability is the foundation of all DMAC's planning and corporate actions. We believe strongly that our business has an inseparable symbiotic relationship with our environment and our community. Doing business with us is helping our communities and our environment.
-              </p>
-            </Card>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
