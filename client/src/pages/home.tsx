@@ -4,7 +4,7 @@ import { ArrowRight, Leaf, Heart, Star, Users, Sparkles, Shield } from "lucide-r
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Service, Testimonial } from "@shared/schema";
+import type { Service, Testimonial } from "@/types";
 
 export default function Home() {
   const { data: services, isLoading: servicesLoading } = useQuery<Service[]>({

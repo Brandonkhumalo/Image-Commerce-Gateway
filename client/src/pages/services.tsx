@@ -3,7 +3,7 @@ import { Clock, DollarSign } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import type { Service } from "@shared/schema";
+import type { Service } from "@/types";
 
 export default function Services() {
   const { data: services, isLoading } = useQuery<Service[]>({

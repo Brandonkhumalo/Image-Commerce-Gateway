@@ -10,7 +10,7 @@ function startFlask(): Promise<void> {
     const flaskPort = "5001";
     const env = { ...process.env, FLASK_PORT: flaskPort };
 
-    flaskProcess = spawn("python3", ["server/app.py"], {
+    flaskProcess = spawn("python3", ["backend/app.py"], {
       env,
       stdio: ["pipe", "pipe", "pipe"],
     });

@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
-import type { Product } from "@shared/schema";
+import type { Product } from "@/types";
 
 interface CartItem {
   product: Product;
