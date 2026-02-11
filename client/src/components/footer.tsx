@@ -70,6 +70,7 @@ export default function Footer() {
 
         <div className="border-t border-white/15 mt-10 pt-6 text-center">
           <p className="text-xs opacity-60">&copy; {new Date().getFullYear()} DMAC Lifestyle Centre. All rights reserved.</p>
+          <p className="text-xs opacity-50 mt-2">Designed and created by <a href="https://tishanyq.co.zw" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">Tishanyq Digital</a></p>
         </div>
       </div>
     </footer>
