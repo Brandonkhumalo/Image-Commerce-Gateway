@@ -36,6 +36,7 @@ import type { Event } from "@/types";
 const EVENT_CATEGORIES = ["Corporate", "Social", "Academic", "Entertainment", "Community", "General"];
 
 function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -48,13 +49,13 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
       const res = await fetch("/api/admin/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
       const data = await res.json();
       if (data.success) {
         onLogin(data.token);
       } else {
-        setError("Invalid password. Please try again.");
+        setError("Invalid username or password. Please try again.");
       }
     } catch {
       setError("Connection error. Please try again.");
@@ -70,18 +71,25 @@ function LoginForm({ onLogin }: { onLogin: (token: string) => void }) {
             <LogIn className="w-7 h-7 text-primary" />
           </div>
           <h2 className="text-xl font-bold">Admin Login</h2>
-          <p className="text-sm text-muted-foreground mt-1">Enter your password to manage events</p>
+          <p className="text-sm text-muted-foreground mt-1">Sign in to manage events</p>
         </div>
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <Input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            data-testid="input-admin-username"
+          />
+          <Input
             type="password"
-            placeholder="Admin password"
+            placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             data-testid="input-admin-password"
           />
           {error && <p className="text-sm text-destructive">{error}</p>}
-          <Button type="submit" disabled={loading || !password} data-testid="button-admin-login">
+          <Button type="submit" disabled={loading || !username || !password} data-testid="button-admin-login">
             {loading ? "Logging in..." : "Log In"}
           </Button>
         </form>

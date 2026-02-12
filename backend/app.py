@@ -16,7 +16,8 @@ CORS(app)
 DB_PATH = os.path.join(os.path.dirname(__file__), "dmac.db")
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "client", "public", "uploads")
 
-ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "DMAC@admin2026")
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME", "dmac")
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "dmac@admin")
 SERVER_SECRET = os.environ.get("SESSION_SECRET", secrets.token_hex(32))
 
 active_sessions = {}
@@ -346,11 +347,12 @@ def get_event(event_id):
 @app.route("/api/admin/login", methods=["POST"])
 def admin_login():
     data = request.get_json()
+    username = data.get("username", "")
     password = data.get("password", "")
-    if hmac.compare_digest(password, ADMIN_PASSWORD):
+    if hmac.compare_digest(username, ADMIN_USERNAME) and hmac.compare_digest(password, ADMIN_PASSWORD):
         token = generate_session_token()
         return jsonify({"token": token, "success": True})
-    return jsonify({"error": "Invalid password", "success": False}), 401
+    return jsonify({"error": "Invalid username or password", "success": False}), 401
 
 
 @app.route("/api/admin/events", methods=["POST"])

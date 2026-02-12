@@ -28,7 +28,7 @@ A 6-page website for DMAC Lifestyle Centre, a hospitality and events company bas
 
 ## Admin Panel
 - Access via footer "Admin" link or `/admin` URL
-- Default password: DMAC@admin2026 (configurable via ADMIN_PASSWORD env var)
+- Default credentials: username `dmac`, password `dmac@admin` (configurable via ADMIN_USERNAME and ADMIN_PASSWORD env vars)
 - Session-based authentication with server-side tokens (8-hour expiry)
 - CRUD operations for events with up to 5 image uploads per event
 - Events auto-delete when their end date/time has passed

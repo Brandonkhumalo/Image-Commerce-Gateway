@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logoPath from "@assets/dmac_logo_1770835060703.jpeg";
 
@@ -41,6 +41,16 @@ export default function Navbar() {
                 </Button>
               </Link>
             ))}
+            <Link href="/admin">
+              <Button
+                variant={location === "/admin" ? "default" : "outline"}
+                size="sm"
+                data-testid="link-nav-admin"
+              >
+                <Shield className="w-4 h-4 mr-1" />
+                Admin
+              </Button>
+            </Link>
           </div>
 
           <Button
@@ -70,6 +80,17 @@ export default function Navbar() {
                 </Button>
               </Link>
             ))}
+            <Link href="/admin">
+              <Button
+                variant={location === "/admin" ? "default" : "outline"}
+                className="w-full justify-start"
+                onClick={() => setMobileOpen(false)}
+                data-testid="link-mobile-admin"
+              >
+                <Shield className="w-4 h-4 mr-1" />
+                Admin
+              </Button>
+            </Link>
           </div>
         </div>
       )}
