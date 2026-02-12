@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Event } from "@/types";
+import heroEvents from "@assets/CNX-25-2_1770892484599.jpg";
 
 function EventImageCarousel({ images, title }: { images: string[]; title: string }) {
   const [current, setCurrent] = useState(0);
@@ -82,7 +83,7 @@ export default function Events() {
     <div>
       <section className="relative py-20 sm:py-28 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/images/service-social.png" alt="" className="w-full h-full object-cover" />
+          <img src={heroEvents} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

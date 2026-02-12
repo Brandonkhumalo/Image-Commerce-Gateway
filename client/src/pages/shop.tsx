@@ -17,6 +17,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import type { Product } from "@/types";
+import heroPackages from "@assets/FB_IMG_1723459488470_1770892484601.jpg";
 
 interface CartItem {
   product: Product;
@@ -105,7 +106,7 @@ export default function Packages() {
     <div>
       <section className="relative py-20 sm:py-28 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="/images/service-social.png" alt="" className="w-full h-full object-cover" />
+          <img src={heroPackages} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
