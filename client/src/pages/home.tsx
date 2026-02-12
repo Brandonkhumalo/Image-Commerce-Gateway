@@ -117,20 +117,24 @@ export default function Home() {
           <div className="absolute inset-0 bg-gradient-to-r from-black/75 via-black/55 to-black/30" />
         </div>
 
-        <button
+        <Button
+          size="icon"
+          variant="ghost"
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/15 backdrop-blur-sm rounded-md p-2 text-white transition-colors hover:bg-white/25"
+          className="absolute left-4 top-1/2 -translate-y-1/2 z-20 bg-white/15 backdrop-blur-sm text-white"
           data-testid="button-hero-prev"
         >
           <ChevronLeft className="w-6 h-6" />
-        </button>
-        <button
+        </Button>
+        <Button
+          size="icon"
+          variant="ghost"
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/15 backdrop-blur-sm rounded-md p-2 text-white transition-colors hover:bg-white/25"
+          className="absolute right-4 top-1/2 -translate-y-1/2 z-20 bg-white/15 backdrop-blur-sm text-white"
           data-testid="button-hero-next"
         >
           <ChevronRight className="w-6 h-6" />
-        </button>
+        </Button>
 
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {heroSlides.map((_, index) => (
@@ -234,7 +238,7 @@ export default function Home() {
                 ))
               : featuredServices.map((service, i) => (
                   <SlideIn key={service.id} direction={i % 2 === 0 ? "left" : "right"} delay={i * 0.1}>
-                    <Card className="overflow-visible hover-elevate group" data-testid={`card-service-${service.id}`}>
+                    <Card className="overflow-visible group" data-testid={`card-service-${service.id}`}>
                       <div className="overflow-hidden rounded-t-md">
                         <img
                           src={service.image}

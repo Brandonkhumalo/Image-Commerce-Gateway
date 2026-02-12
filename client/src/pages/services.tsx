@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Clock, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -56,8 +57,8 @@ export default function Services() {
                   {services
                     ?.filter((s) => s.category === category)
                     .map((service) => (
-                      <Card key={service.id} className="overflow-hidden hover-elevate group" data-testid={`card-service-detail-${service.id}`}>
-                        <div className="relative overflow-hidden">
+                      <Card key={service.id} className="overflow-visible group" data-testid={`card-service-detail-${service.id}`}>
+                        <div className="relative overflow-hidden rounded-t-md">
                           <img
                             src={service.image}
                             alt={service.name}
@@ -107,9 +108,9 @@ export default function Services() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <button className="bg-green-500 hover:bg-green-600 text-white px-8 py-3 rounded-md font-semibold transition-colors" data-testid="button-book-whatsapp">
+            <Button size="lg" className="bg-green-500 border-green-600 text-white font-semibold" data-testid="button-book-whatsapp">
               Enquire via WhatsApp
-            </button>
+            </Button>
           </a>
         </div>
       </section>
