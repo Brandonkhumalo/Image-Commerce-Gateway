@@ -8,8 +8,10 @@ import Footer from "@/components/footer";
 import WhatsAppButton from "@/components/whatsapp-button";
 import Home from "@/pages/home";
 import Services from "@/pages/services";
+import Events from "@/pages/events";
 import About from "@/pages/about";
 import Packages from "@/pages/shop";
+import Admin from "@/pages/admin";
 import NotFound from "@/pages/not-found";
 
 function Router() {
@@ -17,8 +19,10 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/services" component={Services} />
+      <Route path="/events" component={Events} />
       <Route path="/about" component={About} />
       <Route path="/packages" component={Packages} />
+      <Route path="/admin" component={Admin} />
       <Route component={NotFound} />
     </Switch>
   );

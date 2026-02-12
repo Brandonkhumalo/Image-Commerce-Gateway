@@ -7,6 +7,7 @@ import logoPath from "@assets/dmac_logo_1770835060703.jpeg";
 const navLinks = [
   { href: "/", label: "Home" },
   { href: "/services", label: "Services" },
+  { href: "/events", label: "Events" },
   { href: "/about", label: "About Us" },
   { href: "/packages", label: "Packages" },
 ];

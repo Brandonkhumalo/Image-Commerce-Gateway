@@ -2,14 +2,27 @@ import os
 import sqlite3
 import uuid
 import json
+import base64
+import hashlib
+import hmac
+import secrets
 from flask import Flask, request, jsonify, send_from_directory, send_file
 from flask_cors import CORS
-from datetime import datetime
+from datetime import datetime, timedelta
 
 app = Flask(__name__, static_folder=None)
 CORS(app)
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "dmac.db")
+UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "client", "public", "uploads")
+
+ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "DMAC@admin2026")
+SERVER_SECRET = os.environ.get("SESSION_SECRET", secrets.token_hex(32))
+
+active_sessions = {}
+MAX_IMAGE_SIZE = 5 * 1024 * 1024
+
+os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 
 def get_db():
@@ -69,9 +82,51 @@ def init_db():
             content TEXT NOT NULL,
             rating INTEGER NOT NULL DEFAULT 5
         );
+        CREATE TABLE IF NOT EXISTS events (
+            id TEXT PRIMARY KEY,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            venue TEXT NOT NULL,
+            date TEXT NOT NULL,
+            start_time TEXT NOT NULL,
+            end_time TEXT NOT NULL,
+            category TEXT NOT NULL DEFAULT 'General',
+            ticket_price REAL DEFAULT 0,
+            capacity INTEGER DEFAULT 0,
+            images TEXT NOT NULL DEFAULT '[]',
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
     """)
     conn.commit()
     conn.close()
+
+
+def cleanup_expired_events():
+    try:
+        conn = get_db()
+        now = datetime.now()
+        now_str = now.strftime("%Y-%m-%d %H:%M")
+        rows = conn.execute("SELECT id, date, end_time, images FROM events").fetchall()
+        deleted_ids = []
+        for row in rows:
+            event_end = f"{row['date']} {row['end_time']}"
+            try:
+                if event_end < now_str:
+                    deleted_ids.append(row['id'])
+                    images = json.loads(row['images'] or '[]')
+                    for img_path in images:
+                        full_path = os.path.join(os.path.dirname(__file__), "..", "client", "public", img_path.lstrip("/"))
+                        if os.path.exists(full_path):
+                            os.remove(full_path)
+            except Exception:
+                pass
+        if deleted_ids:
+            placeholders = ",".join("?" for _ in deleted_ids)
+            conn.execute(f"DELETE FROM events WHERE id IN ({placeholders})", deleted_ids)
+            conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"Cleanup error: {e}")
 
 
 def seed_db():
@@ -168,6 +223,28 @@ def row_to_dict(row):
     return dict(row)
 
 
+def generate_session_token():
+    token = secrets.token_hex(32)
+    active_sessions[token] = datetime.now() + timedelta(hours=8)
+    expired = [k for k, v in active_sessions.items() if v < datetime.now()]
+    for k in expired:
+        del active_sessions[k]
+    return token
+
+
+def check_admin_auth():
+    auth = request.headers.get("Authorization", "")
+    if not auth.startswith("Bearer "):
+        return False
+    token = auth[7:]
+    if token not in active_sessions:
+        return False
+    if active_sessions[token] < datetime.now():
+        del active_sessions[token]
+        return False
+    return True
+
+
 # ============ API ROUTES ============
 
 @app.route("/api/services", methods=["GET"])
@@ -229,6 +306,195 @@ def get_testimonials():
     conn.close()
     return jsonify([row_to_dict(r) for r in rows])
 
+
+# ============ EVENTS API ============
+
+@app.route("/api/events", methods=["GET"])
+def get_events():
+    cleanup_expired_events()
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM events ORDER BY date ASC, start_time ASC").fetchall()
+    conn.close()
+    events = []
+    for r in rows:
+        d = row_to_dict(r)
+        d["images"] = json.loads(d["images"] or "[]")
+        d["ticketPrice"] = d.pop("ticket_price")
+        d["startTime"] = d.pop("start_time")
+        d["endTime"] = d.pop("end_time")
+        d["createdAt"] = d.pop("created_at")
+        events.append(d)
+    return jsonify(events)
+
+
+@app.route("/api/events/<event_id>", methods=["GET"])
+def get_event(event_id):
+    conn = get_db()
+    row = conn.execute("SELECT * FROM events WHERE id = ?", (event_id,)).fetchone()
+    conn.close()
+    if not row:
+        return jsonify({"message": "Event not found"}), 404
+    d = row_to_dict(row)
+    d["images"] = json.loads(d["images"] or "[]")
+    d["ticketPrice"] = d.pop("ticket_price")
+    d["startTime"] = d.pop("start_time")
+    d["endTime"] = d.pop("end_time")
+    d["createdAt"] = d.pop("created_at")
+    return jsonify(d)
+
+
+@app.route("/api/admin/login", methods=["POST"])
+def admin_login():
+    data = request.get_json()
+    password = data.get("password", "")
+    if hmac.compare_digest(password, ADMIN_PASSWORD):
+        token = generate_session_token()
+        return jsonify({"token": token, "success": True})
+    return jsonify({"error": "Invalid password", "success": False}), 401
+
+
+@app.route("/api/admin/events", methods=["POST"])
+def create_event():
+    if not check_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+
+    data = request.get_json()
+    title = data.get("title")
+    description = data.get("description")
+    venue = data.get("venue")
+    date = data.get("date")
+    start_time = data.get("startTime")
+    end_time = data.get("endTime")
+    category = data.get("category", "General")
+    ticket_price = data.get("ticketPrice", 0)
+    capacity = data.get("capacity", 0)
+    images = data.get("images", [])
+
+    if not all([title, description, venue, date, start_time, end_time]):
+        return jsonify({"error": "Missing required fields"}), 400
+
+    event_id = str(uuid.uuid4())
+
+    saved_images = []
+    for i, img_data in enumerate(images[:5]):
+        if img_data.startswith("data:"):
+            header, b64 = img_data.split(",", 1)
+            raw = base64.b64decode(b64)
+            if len(raw) > MAX_IMAGE_SIZE:
+                continue
+            ext = "jpg"
+            if "png" in header:
+                ext = "png"
+            elif "webp" in header:
+                ext = "webp"
+            filename = f"event_{event_id}_{i}.{ext}"
+            filepath = os.path.join(UPLOAD_DIR, filename)
+            with open(filepath, "wb") as f:
+                f.write(raw)
+            saved_images.append(f"/uploads/{filename}")
+        elif img_data.startswith("/uploads/"):
+            saved_images.append(img_data)
+
+    conn = get_db()
+    conn.execute(
+        "INSERT INTO events (id, title, description, venue, date, start_time, end_time, category, ticket_price, capacity, images) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+        (event_id, title, description, venue, date, start_time, end_time, category, ticket_price, capacity, json.dumps(saved_images))
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({"id": event_id, "success": True}), 201
+
+
+@app.route("/api/admin/events/<event_id>", methods=["PUT"])
+def update_event(event_id):
+    if not check_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+
+    conn = get_db()
+    existing = conn.execute("SELECT * FROM events WHERE id = ?", (event_id,)).fetchone()
+    if not existing:
+        conn.close()
+        return jsonify({"error": "Event not found"}), 404
+
+    data = request.get_json()
+    title = data.get("title", existing["title"])
+    description = data.get("description", existing["description"])
+    venue = data.get("venue", existing["venue"])
+    date = data.get("date", existing["date"])
+    start_time = data.get("startTime", existing["start_time"])
+    end_time = data.get("endTime", existing["end_time"])
+    category = data.get("category", existing["category"])
+    ticket_price = data.get("ticketPrice", existing["ticket_price"])
+    capacity = data.get("capacity", existing["capacity"])
+    images = data.get("images")
+
+    old_images = json.loads(existing["images"] or "[]")
+
+    if images is not None:
+        saved_images = []
+        for i, img_data in enumerate(images[:5]):
+            if img_data.startswith("data:"):
+                header, b64 = img_data.split(",", 1)
+                raw = base64.b64decode(b64)
+                if len(raw) > MAX_IMAGE_SIZE:
+                    continue
+                ext = "jpg"
+                if "png" in header:
+                    ext = "png"
+                elif "webp" in header:
+                    ext = "webp"
+                filename = f"event_{event_id}_{i}_{uuid.uuid4().hex[:6]}.{ext}"
+                filepath = os.path.join(UPLOAD_DIR, filename)
+                with open(filepath, "wb") as f:
+                    f.write(raw)
+                saved_images.append(f"/uploads/{filename}")
+            elif img_data.startswith("/uploads/"):
+                saved_images.append(img_data)
+
+        for old_img in old_images:
+            if old_img not in saved_images:
+                full_path = os.path.join(os.path.dirname(__file__), "..", "client", "public", old_img.lstrip("/"))
+                if os.path.exists(full_path):
+                    os.remove(full_path)
+    else:
+        saved_images = old_images
+
+    conn.execute(
+        "UPDATE events SET title=?, description=?, venue=?, date=?, start_time=?, end_time=?, category=?, ticket_price=?, capacity=?, images=? WHERE id=?",
+        (title, description, venue, date, start_time, end_time, category, ticket_price, capacity, json.dumps(saved_images), event_id)
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({"id": event_id, "success": True})
+
+
+@app.route("/api/admin/events/<event_id>", methods=["DELETE"])
+def delete_event(event_id):
+    if not check_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+
+    conn = get_db()
+    row = conn.execute("SELECT images FROM events WHERE id = ?", (event_id,)).fetchone()
+    if not row:
+        conn.close()
+        return jsonify({"error": "Event not found"}), 404
+
+    images = json.loads(row["images"] or "[]")
+    for img_path in images:
+        full_path = os.path.join(os.path.dirname(__file__), "..", "client", "public", img_path.lstrip("/"))
+        if os.path.exists(full_path):
+            os.remove(full_path)
+
+    conn.execute("DELETE FROM events WHERE id = ?", (event_id,))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"success": True})
+
+
+# ============ CHECKOUT ============
 
 @app.route("/api/orders/checkout", methods=["POST"])
 def checkout():
@@ -384,6 +650,11 @@ def get_order_status(order_id):
 
 DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "client", "dist")
 PUBLIC_DIR = os.path.join(os.path.dirname(__file__), "..", "client", "public")
+
+
+@app.route("/uploads/<path:filename>")
+def serve_uploads(filename):
+    return send_from_directory(UPLOAD_DIR, filename)
 
 
 @app.route("/images/<path:filename>")

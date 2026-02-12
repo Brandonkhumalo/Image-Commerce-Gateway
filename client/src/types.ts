@@ -48,3 +48,18 @@ export interface Testimonial {
   content: string;
   rating: number;
 }
+
+export interface Event {
+  id: string;
+  title: string;
+  description: string;
+  venue: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  category: string;
+  ticketPrice: number;
+  capacity: number;
+  images: string[];
+  createdAt: string;
+}

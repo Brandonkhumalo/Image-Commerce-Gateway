@@ -103,5 +103,12 @@ export async function registerRoutes(
   app.post("/api/orders/paynow-result", proxyToFlask);
   app.get("/api/orders/:id/status", proxyToFlask);
 
+  app.get("/api/events", proxyToFlask);
+  app.get("/api/events/:id", proxyToFlask);
+  app.post("/api/admin/login", proxyToFlask);
+  app.post("/api/admin/events", proxyToFlask);
+  app.put("/api/admin/events/:id", proxyToFlask);
+  app.delete("/api/admin/events/:id", proxyToFlask);
+
   return httpServer;
 }

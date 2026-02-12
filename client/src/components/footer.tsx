@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import { MapPin, Phone, Mail } from "lucide-react";
+import { MapPin, Phone, Mail, Shield } from "lucide-react";
 import { SiWhatsapp, SiFacebook, SiInstagram } from "react-icons/si";
 import logoPath from "@assets/dmac_logo_1770835060703.jpeg";
 
@@ -68,9 +68,13 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/15 mt-10 pt-6 text-center">
+        <div className="border-t border-white/15 mt-10 pt-6 flex flex-col items-center gap-2">
           <p className="text-xs opacity-60">&copy; {new Date().getFullYear()} DMAC Lifestyle Centre. All rights reserved.</p>
-          <p className="text-xs opacity-50 mt-2">Designed and created by <a href="https://tishanyq.co.zw" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">Tishanyq Digital</a></p>
+          <p className="text-xs opacity-50">Designed and created by <a href="https://tishanyq.co.zw" target="_blank" rel="noopener noreferrer" className="underline hover:opacity-80 transition-opacity">Tishanyq Digital</a></p>
+          <Link href="/admin" className="inline-flex items-center gap-1.5 text-xs opacity-40 hover:opacity-60 transition-opacity mt-1" data-testid="link-admin">
+            <Shield className="w-3 h-3" />
+            Admin
+          </Link>
         </div>
       </div>
     </footer>
