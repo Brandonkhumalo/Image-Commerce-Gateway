@@ -47,7 +47,7 @@ export default function Footer() {
               </div>
               <div className="flex items-start gap-2">
                 <Mail className="w-4 h-4 mt-0.5 shrink-0 opacity-80" />
-                <p className="text-sm opacity-80">dmaczimbabwe@gmail.com</p>
+                <p className="text-sm opacity-80">info@dmaclifestyle.com</p>
               </div>
             </div>
           </div>
@@ -55,7 +55,7 @@ export default function Footer() {
           <div>
             <h4 className="font-semibold text-base mb-4">Follow Us</h4>
             <div className="flex items-center gap-3">
-              <a href="#" className="w-10 h-10 rounded-md bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors" data-testid="link-facebook" aria-label="Facebook">
+              <a href="https://www.facebook.com/DMACLifestyleCentre/" target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-md bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors" data-testid="link-facebook" aria-label="Facebook">
                 <SiFacebook className="w-5 h-5" />
               </a>
               <a href="#" className="w-10 h-10 rounded-md bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors" data-testid="link-instagram" aria-label="Instagram">

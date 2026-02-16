@@ -40,7 +40,7 @@ A 6-page website for DMAC Lifestyle Centre, a hospitality and events company bas
 - **Services**: Corporate Functions, Conferencing, Academic Functions, Social Functions (weddings), Team Building, Restaurant, Accommodation
 - **Venues**: 7 function halls, capacities 50-1000 seated, up to 2000 cinema setup
 - **Address**: 40 James Martin Drive, Lochinvar, Harare
-- **Email**: dmaczimbabwe@gmail.com
+- **Email**: info@dmaclifestyle.com
 - **Global presence**: Dubai, Malaysia, Rwanda
 
 ## Environment Variables Required

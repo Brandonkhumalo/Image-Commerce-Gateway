@@ -232,7 +232,7 @@ export default function About() {
             </Card>
             <Card className="p-5 text-center">
               <h4 className="font-semibold mb-1">Email</h4>
-              <p className="text-sm text-muted-foreground">dmaczimbabwe@gmail.com</p>
+              <p className="text-sm text-muted-foreground">info@dmaclifestyle.com</p>
             </Card>
           </div>
         </div>
