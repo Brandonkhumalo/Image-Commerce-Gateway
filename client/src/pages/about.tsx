@@ -15,6 +15,12 @@ export default function About() {
     queryKey: ["/api/assets"],
   });
 
+  const csrProjects = [
+    { title: "ZNA Nurses Support", desc: "Offered free vaccination to southern suburbs and industries during the COVID-12 pandemic." },
+    { title: "Mhondoro Conference Centre", desc: "Developing a new hospitality hub to boost local tourism and employment." },
+    { title: "Global Interchange Program", desc: "Enabling Zimbabwean employees to gain international experience in Dubai and Rwanda." }
+  ];
+
   const values = [
     { icon: Award, title: "Excellence", desc: "We deliver the highest quality hospitality services that meet global standards.", image: tableSetup },
     { icon: Lightbulb, title: "Innovation", desc: "Continuously evolving our offerings to create unique, memorable experiences.", image: conferencePres },
