@@ -312,7 +312,12 @@ def get_testimonials():
 
 @app.route("/api/events", methods=["GET"])
 def get_events():
-    cleanup_expired_events()
+    # Auto-cleanup expired events before fetching
+    try:
+        cleanup_expired_events()
+    except Exception as e:
+        print(f"Auto-cleanup error: {e}")
+
     conn = get_db()
     rows = conn.execute("SELECT * FROM events ORDER BY date ASC, start_time ASC").fetchall()
     conn.close()
@@ -373,9 +378,11 @@ def create_event():
     images = data.get("images", [])
 
     if not all([title, description, venue, date, start_time, end_time]):
+        print(f"Missing fields: title={bool(title)}, desc={bool(description)}, venue={bool(venue)}, date={bool(date)}, start={bool(start_time)}, end={bool(end_time)}")
         return jsonify({"error": "Missing required fields"}), 400
 
     event_id = str(uuid.uuid4())
+    print(f"Creating event {event_id} with title: {title}")
 
     saved_images = []
     for i, img_data in enumerate(images[:5]):
@@ -397,13 +404,18 @@ def create_event():
         elif img_data.startswith("/uploads/"):
             saved_images.append(img_data)
 
-    conn = get_db()
-    conn.execute(
-        "INSERT INTO events (id, title, description, venue, date, start_time, end_time, category, ticket_price, capacity, images) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-        (event_id, title, description, venue, date, start_time, end_time, category, ticket_price, capacity, json.dumps(saved_images))
-    )
-    conn.commit()
-    conn.close()
+    try:
+        conn = get_db()
+        conn.execute(
+            "INSERT INTO events (id, title, description, venue, date, start_time, end_time, category, ticket_price, capacity, images) VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+            (event_id, title, description, venue, date, start_time, end_time, category, ticket_price, capacity, json.dumps(saved_images))
+        )
+        conn.commit()
+        conn.close()
+        print(f"Successfully created event {event_id}")
+    except Exception as e:
+        print(f"Database error during event creation: {e}")
+        return jsonify({"error": f"Database error: {str(e)}", "success": False}), 500
 
     return jsonify({"id": event_id, "success": True}), 201
 
