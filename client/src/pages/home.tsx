@@ -78,13 +78,21 @@ function SlideIn({ children, direction = "left", delay = 0, className = "" }: {
 export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  const { data: assets } = useQuery<Record<string, any>>({
+    queryKey: ["/api/assets"],
+  });
+
+  const dynamicSlides = assets?.home_gallery && Array.isArray(assets.home_gallery) && assets.home_gallery.length > 0
+    ? assets.home_gallery.map((img: string) => ({ image: img, alt: "DMAC slide" }))
+    : heroSlides;
+
   const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-  }, []);
+    setCurrentSlide((prev) => (prev + 1) % dynamicSlides.length);
+  }, [dynamicSlides.length]);
 
   const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
-  }, []);
+    setCurrentSlide((prev) => (prev - 1 + dynamicSlides.length) % dynamicSlides.length);
+  }, [dynamicSlides.length]);
 
   useEffect(() => {
     const timer = setInterval(nextSlide, 5000);
@@ -105,7 +113,7 @@ export default function Home() {
     <div>
       <section className="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
-          {heroSlides.map((slide, index) => (
+          {dynamicSlides.map((slide: any, index: number) => (
             <img
               key={index}
               src={slide.image}
@@ -137,7 +145,7 @@ export default function Home() {
         </Button>
 
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-          {heroSlides.map((_, index) => (
+          {dynamicSlides.map((_: any, index: number) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
@@ -295,7 +303,7 @@ export default function Home() {
             <SlideIn direction="right">
               <div className="relative">
                 <img
-                  src={aerialGardens}
+                  src={assets?.home_about?.[0] || aerialGardens}
                   alt="DMAC Lifestyle Centre"
                   className="rounded-md w-full object-cover h-80 lg:h-96"
                 />
@@ -349,7 +357,7 @@ export default function Home() {
 
       <section className="relative py-20 sm:py-24 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={conferencePres} alt="" className="w-full h-full object-cover" />
+          <img src={assets?.home_footer?.[0] || conferencePres} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/70" />
         </div>
         <SlideIn direction="up">

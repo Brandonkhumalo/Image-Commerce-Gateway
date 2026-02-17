@@ -97,6 +97,10 @@ def init_db():
             images TEXT NOT NULL DEFAULT '[]',
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
+        CREATE TABLE IF NOT EXISTS site_assets (
+            key TEXT PRIMARY KEY,
+            value TEXT NOT NULL
+        );
     """)
     conn.commit()
     conn.close()
@@ -254,10 +258,24 @@ def get_services():
     rows = conn.execute("SELECT * FROM services").fetchall()
     conn.close()
     services = []
+    
+    # Get custom service images from assets if they exist
+    # Mapping service names to asset keys
+    conn = get_db()
+    assets_rows = conn.execute("SELECT * FROM site_assets WHERE key LIKE 'service_img_%'").fetchall()
+    conn.close()
+    service_assets = {row["key"]: json.loads(row["value"]) for row in assets_rows}
+
     for r in rows:
         d = row_to_dict(r)
         d["featured"] = bool(d["featured"])
         d["shortDescription"] = d.pop("short_description")
+        
+        # Check for dynamic image override
+        asset_key = f"service_img_{d['id']}"
+        if asset_key in service_assets and service_assets[asset_key]:
+            d["image"] = service_assets[asset_key][0]
+            
         services.append(d)
     return jsonify(services)
 
@@ -272,6 +290,16 @@ def get_service(service_id):
     d = row_to_dict(row)
     d["featured"] = bool(d["featured"])
     d["shortDescription"] = d.pop("short_description")
+    
+    # Check for dynamic image override
+    conn = get_db()
+    asset_row = conn.execute("SELECT value FROM site_assets WHERE key = ?", (f"service_img_{service_id}",)).fetchone()
+    conn.close()
+    if asset_row:
+        val = json.loads(asset_row["value"])
+        if val:
+            d["image"] = val[0]
+            
     return jsonify(d)
 
 
@@ -506,6 +534,63 @@ def delete_event(event_id):
     conn.close()
 
     return jsonify({"success": True})
+
+
+# ============ SITE ASSETS API ============
+
+@app.route("/api/assets", methods=["GET"])
+def get_site_assets():
+    conn = get_db()
+    rows = conn.execute("SELECT * FROM site_assets").fetchall()
+    conn.close()
+    return jsonify({row["key"]: json.loads(row["value"]) for row in rows})
+
+
+@app.route("/api/admin/assets", methods=["POST"])
+def update_site_asset():
+    if not check_admin_auth():
+        return jsonify({"error": "Unauthorized"}), 401
+
+    data = request.get_json()
+    key = data.get("key")
+    value = data.get("value")
+
+    if not key or value is None:
+        return jsonify({"error": "Missing key or value"}), 400
+
+    # Handle image processing if value contains base64 images
+    processed_value = []
+    if isinstance(value, list):
+        for i, item in enumerate(value):
+            if isinstance(item, str) and item.startswith("data:"):
+                header, b64 = item.split(",", 1)
+                raw = base64.b64decode(b64)
+                if len(raw) > MAX_IMAGE_SIZE:
+                    continue
+                ext = "jpg"
+                if "png" in header:
+                    ext = "png"
+                elif "webp" in header:
+                    ext = "webp"
+                filename = f"asset_{key}_{i}_{uuid.uuid4().hex[:6]}.{ext}"
+                filepath = os.path.join(UPLOAD_DIR, filename)
+                with open(filepath, "wb") as f:
+                    f.write(raw)
+                processed_value.append(f"/uploads/{filename}")
+            else:
+                processed_value.append(item)
+    else:
+        processed_value = value
+
+    conn = get_db()
+    conn.execute(
+        "INSERT OR REPLACE INTO site_assets (key, value) VALUES (?, ?)",
+        (key, json.dumps(processed_value))
+    )
+    conn.commit()
+    conn.close()
+
+    return jsonify({"success": True, "value": processed_value})
 
 
 # ============ CHECKOUT ============

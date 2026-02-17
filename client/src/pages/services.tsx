@@ -9,6 +9,10 @@ import conferenceGold from "@assets/CNX-3_1770892484595.jpg";
 import weddingSetup from "@assets/FB_IMG_1723459488470_1770892484601.jpg";
 
 export default function Services() {
+  const { data: assets } = useQuery<Record<string, any>>({
+    queryKey: ["/api/assets"],
+  });
+
   const { data: services, isLoading } = useQuery<Service[]>({
     queryKey: ["/api/services"],
   });
@@ -19,7 +23,7 @@ export default function Services() {
     <div>
       <section className="relative py-20 sm:py-28 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={conferenceGold} alt="" className="w-full h-full object-cover" />
+          <img src={assets?.services_header?.[0] || conferenceGold} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -97,7 +101,7 @@ export default function Services() {
 
       <section className="relative py-16 sm:py-20 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={weddingSetup} alt="" className="w-full h-full object-cover" />
+          <img src={assets?.services_footer?.[0] || weddingSetup} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-black/70" />
         </div>
         <div className="relative z-10 max-w-3xl mx-auto px-4 text-center">

@@ -1,5 +1,6 @@
 import { Target, Eye, Award, Users, Lightbulb, Handshake, Heart } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useQuery } from "@tanstack/react-query";
 import logoPath from "@assets/dmac_logo_1770835060703.jpeg";
 import dmacSign from "@assets/CNX-6_1770892484597.jpg";
 import aerialGardens from "@assets/CNX-5-2_1770892484597.jpg";
@@ -9,34 +10,23 @@ import conferencePres from "@assets/CNX-25-2_1770892484599.jpg";
 import communityGroup from "@assets/CNX-8_1770892484598.jpg";
 import outdoorActivity from "@assets/CNX-2_1770892484600.jpg";
 
-const values = [
-  { icon: Award, title: "Excellence", desc: "We deliver the highest quality hospitality services that meet global standards.", image: tableSetup },
-  { icon: Lightbulb, title: "Innovation", desc: "Continuously evolving our offerings to create unique, memorable experiences.", image: conferencePres },
-  { icon: Handshake, title: "Integrity", desc: "Building trust through honest, transparent business practices.", image: communityGroup },
-  { icon: Users, title: "Teamwork", desc: "Collaborative effort to ensure every event exceeds expectations.", image: outdoorActivity },
-];
-
-const csrProjects = [
-  {
-    title: "Igniting the Future Through Education",
-    desc: "One of DMAC's core CSR commitments is in children's education. We helped source primary and secondary school textbooks for Mutimusakwa School in Mhondoro, resulting in remarkable improvement in school results."
-  },
-  {
-    title: "A Commitment to Public Health",
-    desc: "During the peak of the Covid health crisis, DMAC in conjunction with the Zimbabwe National Army mobilised resources to ensure community safety through free vaccinations, providing essential COVID-19 testing and health education."
-  },
-  {
-    title: "Honouring Our Heroes",
-    desc: "Between 2019 and 2021, DMAC spearheaded the exhumation and reburial of 120 bodies of ex-freedom fighters found in a disused shaft in the Odzi area of Mutare. The entire exercise, costing US$350,000, was fully funded by DMAC Zimbabwe."
-  },
-];
-
 export default function About() {
+  const { data: assets } = useQuery<Record<string, any>>({
+    queryKey: ["/api/assets"],
+  });
+
+  const values = [
+    { icon: Award, title: "Excellence", desc: "We deliver the highest quality hospitality services that meet global standards.", image: tableSetup },
+    { icon: Lightbulb, title: "Innovation", desc: "Continuously evolving our offerings to create unique, memorable experiences.", image: conferencePres },
+    { icon: Handshake, title: "Integrity", desc: "Building trust through honest, transparent business practices.", image: communityGroup },
+    { icon: Users, title: "Teamwork", desc: "Collaborative effort to ensure every event exceeds expectations.", image: outdoorActivity },
+  ];
+
   return (
     <div>
       <section className="relative py-20 sm:py-28 overflow-hidden">
         <div className="absolute inset-0">
-          <img src={dmacSign} alt="" className="w-full h-full object-cover" />
+          <img src={assets?.about_header?.[0] || dmacSign} alt="" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/40" />
         </div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -98,7 +88,7 @@ export default function About() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
             <div className="relative rounded-md overflow-hidden group min-h-[280px]">
-              <img src={aerialGardens} alt="Our Vision" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img src={assets?.vision_image?.[0] || aerialGardens} alt="Our Vision" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/25" />
               <div className="relative z-10 h-full flex flex-col justify-end p-8">
                 <div className="flex items-center gap-3 mb-4">
@@ -113,7 +103,7 @@ export default function About() {
               </div>
             </div>
             <div className="relative rounded-md overflow-hidden group min-h-[280px]">
-              <img src={gardenTopiary} alt="Sustainability" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img src={assets?.sustainability_image?.[0] || gardenTopiary} alt="Sustainability" className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/25" />
               <div className="relative z-10 h-full flex flex-col justify-end p-8">
                 <div className="flex items-center gap-3 mb-4">
