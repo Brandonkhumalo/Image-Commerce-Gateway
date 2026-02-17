@@ -37,7 +37,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import type { Event } from "@/types";
+import type { Event, Service } from "@/types";
 
 const EVENT_CATEGORIES = ["Corporate", "Social", "Academic", "Entertainment", "Community", "General"];
 
@@ -710,54 +710,6 @@ export default function Admin() {
           </TabsContent>
         </Tabs>
       </div>
-
-      <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) { setDialogOpen(false); setEditing(null); } }}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{editing ? "Edit Event" : "Add New Event"}</DialogTitle>
-          </DialogHeader>
-          <EventForm
-            initial={editing ? {
-              title: editing.title,
-              description: editing.description,
-              venue: editing.venue,
-              date: editing.date,
-              startTime: editing.startTime,
-              endTime: editing.endTime,
-              category: editing.category,
-              ticketPrice: editing.ticketPrice,
-              capacity: editing.capacity,
-              images: editing.images,
-            } : emptyForm}
-            onSubmit={handleFormSubmit}
-            onCancel={() => { setDialogOpen(false); setEditing(null); }}
-            loading={createMutation.isPending || updateMutation.isPending}
-          />
-        </DialogContent>
-      </Dialog>
-
-      <AlertDialog open={!!deleteId} onOpenChange={(open) => { if (!open) setDeleteId(null); }}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete Event</AlertDialogTitle>
-            <AlertDialogDescription>
-              Are you sure you want to delete this event? This action cannot be undone. All associated images will also be removed.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel data-testid="button-cancel-delete">Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={() => deleteId && deleteMutation.mutate(deleteId)}
-              data-testid="button-confirm-delete"
-            >
-              {deleteMutation.isPending ? "Deleting..." : "Delete"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>
-  );
-}
 
       <Dialog open={dialogOpen} onOpenChange={(open) => { if (!open) { setDialogOpen(false); setEditing(null); } }}>
         <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
