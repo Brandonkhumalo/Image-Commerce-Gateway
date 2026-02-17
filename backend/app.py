@@ -650,7 +650,7 @@ def get_order_status(order_id):
 
 # ============ STATIC FILE SERVING ============
 
-DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "client", "dist")
+DIST_DIR = os.path.join(os.path.dirname(__file__), "..", "dist", "public")
 PUBLIC_DIR = os.path.join(os.path.dirname(__file__), "..", "client", "public")
 
 
