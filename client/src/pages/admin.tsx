@@ -423,29 +423,30 @@ function AssetManager({ token }: { token: string }) {
                 <Button 
                   size="sm" 
                   variant="outline"
-                  onClick={() => handleImageChange(section.key, assets?.[section.key] || [], section.key !== 'home_gallery')}
+                  onClick={() => handleImageChange(section.key, assets?.[section.key] || [], false)}
                   disabled={updateAssetMutation.isPending}
                 >
-                  <ImagePlus className="w-3.5 h-3.5 mr-1.5" />
-                  Change
+                  <Plus className="w-3.5 h-3.5 mr-1.5" />
+                  Add Image
                 </Button>
               </div>
               
               <div className="flex flex-wrap gap-2">
                 {(assets?.[section.key] || []).map((img: string, i: number) => (
-                  <div key={i} className="relative w-16 h-16 rounded overflow-hidden border">
+                  <div key={i} className="relative w-20 h-20 rounded overflow-hidden border">
                     <img src={img} alt="" className="w-full h-full object-cover" />
                     <button
                       onClick={() => removeImage(section.key, assets?.[section.key], i)}
-                      className="absolute top-0.5 right-0.5 w-4 h-4 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80"
+                      className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors"
+                      title="Remove image"
                     >
-                      <X className="w-2.5 h-2.5" />
+                      <X className="w-3 h-3" />
                     </button>
                   </div>
                 ))}
                 {(!assets?.[section.key] || assets[section.key].length === 0) && (
-                  <div className="w-16 h-16 rounded bg-muted flex items-center justify-center border border-dashed">
-                    <span className="text-[8px] text-muted-foreground">Default</span>
+                  <div className="w-20 h-20 rounded bg-muted flex items-center justify-center border border-dashed">
+                    <span className="text-[10px] text-muted-foreground text-center px-1">Using Default</span>
                   </div>
                 )}
               </div>
