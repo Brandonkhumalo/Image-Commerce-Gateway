@@ -375,12 +375,13 @@ function AssetManager({ token }: { token: string }) {
       
       const newImages = single ? [] : [...currentImages];
       let loaded = 0;
-      Array.from(files).forEach((file: any) => {
+      const fileList = Array.from(files);
+      fileList.forEach((file: any) => {
         const reader = new FileReader();
         reader.onload = () => {
           newImages.push(reader.result as string);
           loaded++;
-          if (loaded === files.length) {
+          if (loaded === fileList.length) {
             updateAssetMutation.mutate({ key, value: single ? [newImages[0]] : newImages });
           }
         };
@@ -408,6 +409,27 @@ function AssetManager({ token }: { token: string }) {
     { key: "sustainability_image", title: "About Us: Sustainability Image", description: "Image for the sustainability section" },
   ];
 
+  const getImageUrl = (key: string, defaultPath: string) => {
+    const asset = assets?.[key];
+    if (Array.isArray(asset) && asset.length > 0) {
+      return asset[0];
+    }
+    return defaultPath;
+  };
+
+  const getDefaultImageForKey = (key: string) => {
+    switch(key) {
+      case "home_about": return "/images/conference-gold.jpg";
+      case "home_footer": return "/images/exterior-gardens.jpg";
+      case "services_header": return "/images/conference-red.jpg";
+      case "services_footer": return "/images/wedding-setup.jpg";
+      case "about_header": return "/images/hero-aerial.jpg";
+      case "vision_image": return "/images/conference-red.jpg";
+      case "sustainability_image": return "/images/exterior-gardens.jpg";
+      default: return "/images/hero-aerial.jpg";
+    }
+  };
+
   return (
     <div className="flex flex-col gap-8">
       <div className="space-y-4">
@@ -423,30 +445,59 @@ function AssetManager({ token }: { token: string }) {
                 <Button 
                   size="sm" 
                   variant="outline"
-                  onClick={() => handleImageChange(section.key, assets?.[section.key] || [], false)}
+                  onClick={() => handleImageChange(section.key, assets?.[section.key] || [], section.key !== "home_gallery")}
                   disabled={updateAssetMutation.isPending}
                 >
                   <Plus className="w-3.5 h-3.5 mr-1.5" />
-                  Add Image
+                  {section.key === "home_gallery" ? "Add Image" : "Change Image"}
                 </Button>
               </div>
               
               <div className="flex flex-wrap gap-2">
-                {(assets?.[section.key] || []).map((img: string, i: number) => (
-                  <div key={i} className="relative w-20 h-20 rounded overflow-hidden border">
-                    <img src={img} alt="" className="w-full h-full object-cover" />
-                    <button
-                      onClick={() => removeImage(section.key, assets?.[section.key], i)}
-                      className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors"
-                      title="Remove image"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </div>
-                ))}
-                {(!assets?.[section.key] || assets[section.key].length === 0) && (
-                  <div className="w-20 h-20 rounded bg-muted flex items-center justify-center border border-dashed">
-                    <span className="text-[10px] text-muted-foreground text-center px-1">Using Default</span>
+                {section.key === "home_gallery" ? (
+                  <>
+                    {(assets?.[section.key] || []).map((img: string, i: number) => (
+                      <div key={i} className="relative w-24 h-24 rounded overflow-hidden border">
+                        <img src={img} alt="" className="w-full h-full object-cover" />
+                        <button
+                          onClick={() => removeImage(section.key, assets?.[section.key], i)}
+                          className="absolute top-1 right-1 w-6 h-6 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 transition-colors shadow-sm"
+                          title="Remove image"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                    {(!assets?.[section.key] || assets[section.key].length === 0) && (
+                      <div className="relative w-24 h-24 rounded overflow-hidden border">
+                        <img src="/images/hero-aerial.jpg" alt="Default" className="w-full h-full object-cover opacity-50" />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                           <span className="text-[10px] text-white font-medium">Default</span>
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="relative w-full h-32 rounded overflow-hidden border">
+                    <img 
+                      src={getImageUrl(section.key, getDefaultImageForKey(section.key))} 
+                      alt={section.title} 
+                      className="w-full h-full object-cover" 
+                    />
+                    {assets?.[section.key] && assets[section.key].length > 0 && (
+                      <button
+                        onClick={() => updateAssetMutation.mutate({ key: section.key, value: [] })}
+                        className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/60 text-white flex items-center justify-center hover:bg-black/80 shadow-md transition-colors"
+                        title="Reset to default"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    )}
+                    {(!assets?.[section.key] || assets[section.key].length === 0) && (
+                      <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-black/40 backdrop-blur-sm text-white text-[10px] font-medium">
+                        Default
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
